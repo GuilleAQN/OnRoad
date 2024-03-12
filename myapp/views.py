@@ -20,6 +20,7 @@ def about(request):
 
 
 def info_view(request):
+    Usuarios = apps.get_model('myapp', 'Usuarios')
     objects = Usuarios.objects.all()
 
     data = [{'Id': obj.usuarioid, 'Nombre': obj.nombreusuario}

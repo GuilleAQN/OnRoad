@@ -1,7 +1,5 @@
 from django.db import models
 
-import myapp
-
 
 class Clientes(models.Model):
     clienteid = models.AutoField(primary_key=True)
@@ -14,7 +12,7 @@ class Clientes(models.Model):
         'Usuarios', models.DO_NOTHING, db_column='usuarioid', blank=True, null=True)
 
     class Meta:
-        app_label = myapp
+        app_label = 'myapp'
         db_table = 'clientes'
 
 
@@ -30,7 +28,7 @@ class Conductores(models.Model):
         'Usuarios', models.DO_NOTHING, db_column='usuarioid', blank=True, null=True)
 
     class Meta:
-        app_label = myapp
+        app_label = 'myapp'
         db_table = 'conductores'
 
 
@@ -39,7 +37,7 @@ class Roles(models.Model):
     nombrerol = models.CharField(max_length=50)
 
     class Meta:
-        app_label = myapp
+        app_label = 'myapp'
         db_table = 'roles'
 
 
@@ -52,7 +50,7 @@ class Rutas(models.Model):
     preciobase = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
-        app_label = myapp
+        app_label = 'myapp'
         db_table = 'rutas'
 
 
@@ -67,7 +65,7 @@ class Tickets(models.Model):
     preciototal = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
-        app_label = myapp
+        app_label = 'myapp'
         db_table = 'tickets'
 
 
@@ -80,7 +78,7 @@ class Usuarios(models.Model):
     fechacreacion = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        app_label = myapp
+        app_label = 'myapp'
         db_table = 'usuarios'
 
 
@@ -96,7 +94,7 @@ class Vehiculos(models.Model):
         Conductores, models.DO_NOTHING, db_column='conductorid', blank=True, null=True)
 
     class Meta:
-        app_label = myapp
+        app_label = 'myapp'
         db_table = 'vehiculos'
 
 
@@ -110,5 +108,5 @@ class Viajes(models.Model):
     cuposdisponibles = models.IntegerField()
 
     class Meta:
-        app_label = myapp
+        app_label = 'myapp'
         db_table = 'viajes'
