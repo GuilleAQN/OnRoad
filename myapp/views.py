@@ -1,8 +1,9 @@
+from django.apps import apps
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
+from myapp import views 
 
 # Create your views here.
-
 
 def index(request):
     title = "OnRoad"
@@ -10,14 +11,11 @@ def index(request):
         "title": title,
     })
 
-
 def hello(request):
     return HttpResponse("<h1>Hola mundo</h1>")
 
-
 def about(request):
     return HttpResponse("<h1>About</h1>")
-
 
 def info_view(request):
     Usuarios = apps.get_model('myapp', 'Usuarios')
