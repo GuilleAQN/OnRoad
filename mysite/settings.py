@@ -29,7 +29,7 @@ SECRET_KEY = '-+8$u$dwr4=mua7w91w__foul0z%*j*4_2y07e3!ak(qrk#i6nogdsfd'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'onroad.onrender.com']
 
 
 # Application definition
