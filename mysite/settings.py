@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'myapp'
 ]
 
 MIDDLEWARE = [
@@ -102,10 +101,12 @@ DATABASES = {
 
 
 if DATABASE_DEV_URL:
-    DATABASES['development'] = {'ENGINE': 'django.db.backends.postgresql', **dj_database_url.parse(DATABASE_DEV_URL)}
+    DATABASES['development'] = {
+        'ENGINE': 'django.db.backends.postgresql', **dj_database_url.parse(DATABASE_DEV_URL)}
 
 if DATABASE_PROD_URL:
-    DATABASES['production'] = {'ENGINE': 'django.db.backends.postgresql', **dj_database_url.parse(DATABASE_PROD_URL)}
+    DATABASES['production'] = {
+        'ENGINE': 'django.db.backends.postgresql', **dj_database_url.parse(DATABASE_PROD_URL)}
 
 ENVIRONMENT = os.getenv('DJANGO_ENV', 'development')
 DATABASE_CONFIG = DATABASES.get(ENVIRONMENT, DATABASES['development'])
