@@ -63,7 +63,7 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -137,15 +137,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Directorios adicionales donde se buscarán archivos estáticos
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
-]
-
-# Directorio de plantillas
-TEMPLATES = [
-    {
-        # Otras configuraciones...
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        # Otras configuraciones...
-    },
 ]
 
 
