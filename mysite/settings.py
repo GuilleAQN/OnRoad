@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+from email.policy import default
 from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
@@ -22,18 +23,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '-+8$u$dwr4=mua7w91w__foul0z%*j*4_2y07e3!ak(qrk#i6nogdsfd'
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY', default='-+8$u$dwr4=mua7w91w__foul0z%*j*4_2y07e3!ak(qrk#i6nogdsfd')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = []
 
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
 
 # Application definition
-
 INSTALLED_APPS = [
     'myapp',
     'django.contrib.admin',
@@ -46,6 +49,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -59,7 +63,7 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,39 +84,21 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASE_DEV_URL = os.getenv('DATABASE_DEV_URL')
 DATABASE_PROD_URL = os.getenv('DATABASE_PROD_URL')
 
-DATABASES = {
-    'development': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'development_db',
-        'USER': 'dev_user',
-        'PASSWORD': 'dev_password',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    },
-    'production': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'production_db',
-        'USER': 'prod_user',
-        'PASSWORD': 'prod_password',
-        'HOST': 'prod_host',
-        'PORT': 'prod_port',
-    },
-}
-
+DATABASES = {}
 
 if DATABASE_DEV_URL:
-    DATABASES['development'] = {
-        'ENGINE': 'django.db.backends.postgresql', **dj_database_url.parse(DATABASE_DEV_URL)}
+    DATABASES.update(development={
+        'ENGINE': 'django.db.backends.postgresql', **dj_database_url.parse(DATABASE_DEV_URL)})
 
 if DATABASE_PROD_URL:
-    DATABASES['production'] = {
-        'ENGINE': 'django.db.backends.postgresql', **dj_database_url.parse(DATABASE_PROD_URL)}
+    DATABASES.update(production={
+        'ENGINE': 'django.db.backends.postgresql', **dj_database_url.parse(DATABASE_PROD_URL)})
 
 ENVIRONMENT = os.getenv('DJANGO_ENV', 'production')
-DATABASE_CONFIG = DATABASES.get(ENVIRONMENT, DATABASES['development'])
+DATABASE_CONFIG = DATABASES.get(ENVIRONMENT, DATABASES['production'])
 
-# Use the chosen database configuration
 DATABASES['default'] = DATABASE_CONFIG
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -134,8 +120,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -146,11 +130,15 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
+STATIC_URL = '/static/'
 
-STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Directorios adicionales donde se buscarán archivos estáticos
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
