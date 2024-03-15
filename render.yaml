@@ -15,7 +15,7 @@ services:
       - key: DATABASE_PROD_URL
         fromDatabase:
           name: ProductionDB
-          property: postgres://web_user:6FYoTPLIUmTHdNpOElWEfjBpsybohKGx@dpg-cnoqh5v109ks73b9thsg-a.oregon-postgres.render.com/onroad
+          property: connectionString
       - key: SECRET_KEY
         generateValue: true
       - key: WEB_CONCURRENCY
