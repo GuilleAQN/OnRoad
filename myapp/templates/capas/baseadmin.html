@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static "/css/estilo.css" %}" rel="stylesheet"/> 
+</head>
+<body class="bg-dark">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark", id="nave">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="{% static "/img/im.webp" %}" alt="Foto personal" style="width:100px;" class="rounded-pill">
+                <div class="nombre">
+                    OnRoad
+                </div>
+            </a>
+        </div>
+    </nav>
+
+
+    <header>
+        <div>
+            <nav class="navbar navbar-expand-sm bg-info-subtle", id="nave">
+                <div class="container-fluid d-flex justify-content-center align-items-center">
+                        <div class="navbar font-weight-bold">
+                            Perfil administrativo
+                        </div>     
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <button class="btn btn-primary bg-info-subtle my-3 text-black" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">📃Menu</button>
+
+<div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+  <div class="offcanvas-header bg-dark">
+    <h3 class="offcanvas-title text-white" id="offcanvasScrollingLabel">Menu</h3>
+    <button type="button" class="btn-close btn-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body bg-info-subtle">
+    <ul class="list-group">
+        <li class="list-group-item"><a href="#">Usuarios</a></li>
+        <li class="list-group-item"><a href="#">Conductores</a></li>
+        <li class="list-group-item"><a href="#">Vehiculos</a></li>
+        <li class="list-group-item"><a href="#">Rutas</a></li>
+        <li class="list-group-item"><a href="#">Viajes</a></li>
+        <li class="list-group-item"><a href="#">Tickets</a></li>
+      </ul>
+  </div>
+</div>
+
+    {% block content %}
+
+    {% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

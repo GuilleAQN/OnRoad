@@ -7,6 +7,17 @@
   right: 0px;
   display: inline;
 }
+.nombres{
+  font-size: 60px;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  display: inline-block; /* Cambiado de 'inline' a 'inline-block' para aplicar text-align */
+  text-align: center; /* Centrar el contenido */
+  position: relative;
+  top: 15px;
+  bottom: 20px;
+  left: 20px;
+  right: 0px;
+}
 
 .nombre {
   font-size: 60px;
@@ -19,9 +30,7 @@
   right: 0px;
 }
 
-.lo {
-  background-color: black;
-}
+
 
 a {
   text-decoration: none;
@@ -47,4 +56,7 @@ a {
   align-content: center;
   position: relative;
   top: 15px;
+}
+body{
+  background-color: gray;
 }
