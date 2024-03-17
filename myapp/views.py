@@ -25,3 +25,18 @@ def info_view(request):
             for obj in objects]
 
     return JsonResponse({'Respuestas': data})
+
+def registro_cliente(request):
+    return render (request,"capas/clientes.html")
+
+def create_conductor(request):
+    return render (request,"admin/create_conductor.html")
+
+def create_ruta(request):
+    return render (request,"admin/create_ruta.html")
+
+def create_vehiculo(request):
+    return render (request,"admin/create_vehiculo.html")
+
+def create_viaje(request):
+    return render (request,"admin/create_viajes.html")
