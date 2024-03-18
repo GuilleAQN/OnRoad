@@ -40,3 +40,6 @@ def create_vehiculo(request):
 
 def create_viaje(request):
     return render (request,"admin/create_viajes.html")
+
+def create_admin(request):
+    return render (request,"admin/create_admin.html")
