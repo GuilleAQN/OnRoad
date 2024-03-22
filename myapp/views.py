@@ -86,7 +86,7 @@ def info_view(request):
 @login_required(login_url='/')
 def pagina_principal(request):
     titulo = "OnRoad"
-    rol = "capas/baseadmin.html" if request.user.rolid.rolid == 1 else "capas/base.html"
+    rol = "capas/baseadmin.html" if request.user.rolid.rolid == 1 else "capas/baseusuario.html"
 
     return render(request, "index.html", {
         'titulo': titulo,
