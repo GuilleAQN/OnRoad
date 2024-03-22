@@ -46,3 +46,24 @@ def create_viaje(request):
 
 def create_admin(request):
     return render (request,"admin/create_admin.html")
+
+def view_conductor(request):
+    return render (request,"admin/view_conductor.html")
+
+def view_ruta(request):
+    return render (request,"admin/view_ruta.html")
+
+def view_tickets(request):
+    return render (request,"admin/view_tickets.html")
+
+def view_usuarios(request):
+    return render (request,"admin/view_usuarios.html")
+
+def view_vehiculos(request):
+    return render (request,"admin/view_vehiculos.html") 
+
+def view_viajes(request):
+    return render (request,"admin/view_viajes.html")
+
+def venta_ticket(request):
+    return render (request,"capas/venta_ticket.html")   

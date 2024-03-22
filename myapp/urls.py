@@ -12,6 +12,13 @@ urlpatterns = [
     path("create_viaje/",views.create_viaje),
     path("create_vehiculo/",views.create_vehiculo),
     path("create_admin/",views.create_admin),
+    path("view_conductor/",views.view_conductor),
+    path("view_ruta/",views.view_ruta),
+    path("view_tickets/",views.view_tickets),
+    path("view_usuarios/",views.view_usuarios),
+    path("view_vehiculos/",views.view_vehiculos),
+    path("view_viajes/",views.view_viajes),
+    path("venta_ticket/",views.venta_ticket),
 ]
 
 if settings.DEBUG:
