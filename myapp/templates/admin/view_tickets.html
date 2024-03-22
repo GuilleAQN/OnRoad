@@ -1,0 +1,31 @@
+{% extends 'capas/baseadmin.html' %}
+
+{% block title %}
+  {{ titulo }}
+{% endblock %}
+
+{% block content %}
+  {{ block.super }}
+    <div class="container my-5 rounded ">
+      <div id="accordion">
+        <div class="card my-4  text-black">
+          <div class="card-header bg-white text-black d-flex justify-content-between align-items-center">
+            <a class="btn text-black" data-bs-toggle="collapse" href="#collapseOne">Ticket # </a>
+            <div class="align-items-right">
+            <a class="btn text-bg-red text-white "  href="#collapseOne"><button type="button" class="btn btn-success">Editar ticket</button></a>
+            <a class="btn text-bg-green text-white"  href="#collapseOne"><button type="button" class="btn btn-danger">Eliminar ticket</button></a>
+          </div>
+          </div>
+          <div id="collapseOne" class="collapse show bg-info-subtle text-white" data-bs-parent="#accordion">
+            <div class="card-body text-black">Identificador del cliente: </div>
+            <div class="card-body text-black">Identificador del viaje: </div>
+            <div class="card-body text-black">Fecha reservación: </div>
+            <div class="card-body text-black">Estado ticket: </div>            
+            <div class="card-body text-black">Precio: </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+{% endblock %}

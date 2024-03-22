@@ -12,8 +12,8 @@
     <link rel="stylesheet" href="{% static '/css/estilo.css' %}" rel="stylesheet" />
 </head>
 
-<body>
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark" id="nave">
+<body class="bg-dark" >
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark" , id="nave">
         <div class="container-fluid">
             <div class="navbar-brand">
                 <img src="{% static '/img/im.webp' %}" alt="Foto personal" style="width:100px;" class="rounded-pill">
@@ -36,6 +36,19 @@
             </div>
         </div>
     </nav>
+    <nav class="navbar navbar-expand-sm bg-info-subtle justify-content-center">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Mis tickets</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Comprar ticket</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Mi perfil</a>
+          </li>
+        </ul>
+      </nav>
     {% block content %}
 
     {% endblock %}
