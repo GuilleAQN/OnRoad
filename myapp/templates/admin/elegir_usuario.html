@@ -1,0 +1,27 @@
+{% extends 'capas/baseadmin.html' %}
+
+{% block title %}
+{{ titulo }}
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<div class="container-sm col-md-5 my-5 bg-info-subtle rounded">
+  <h1 class="text-black">Tipo de Usuario a registrar</h1>
+  <form class="row g-3" action="registro_usuario/" method="GET">
+    {% csrf_token %}
+    <div class="col-md-10">
+      <label for="inputRoles" class="form-label">Roles</label>
+      <select id="inputRoles" name="inputRoles" class="form-select">
+        {% for rol in roles %}
+        <option value="{{rol.rolid}}">{{rol.nombrerol}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-12 my-4">
+      <button type="submit" class="btn btn-primary">Registrar</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

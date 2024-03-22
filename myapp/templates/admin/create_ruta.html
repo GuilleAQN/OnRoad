@@ -8,30 +8,46 @@
 {{ block.super }}
 <div class="container-sm col-md-8 my-5 bg-info-subtle rounded">
   <h1 class="text-black">Registro de rutas</h1>
-  <form class="row g-3">
+  <form class="row g-3" method="POST">
+    {% csrf_token %}
     <div class="col-md-6">
-      <label for="inputEmail4" class="form-label">Lugar de origen</label>
-      <input type="email text-body-dark" class="form-control bg-trasnparent" id="inputEmail4" placeholder="Salida">
+      <label for="inputOrigin" class="form-label">Lugar de origen</label>
+      <input type="text" class="form-control bg-trasnparent" id="inputOrigin" name="inputOrigin" placeholder="Salida">
     </div>
     <div class="col-md-6">
       <label for="inputPassword4" class="form-label">Lugar de destino</label>
-      <input type="password" class="form-control" id="inputPassword4" placeholder="Destino">
+      <input type="text" class="form-control" id="inputDestiny" name="inputDestiny" placeholder="Destino">
     </div>
     <div class="col-md-4">
-      <label for="inputAddress" class="form-label">Distancia</label>
-      <input type="text" class="form-control" id="inputAddress" placeholder="Distancia (kms)">
+      <label for="inputDistance" class="form-label">Distancia</label>
+      <input type="number" class="form-control" id="inputDistance" name="inputDistance" placeholder="Distancia (kms)">
     </div>
     <div class="col-md-4">
-      <label for="inputAddress2" class="form-label">Duración estimada</label>
-      <input type="text" class="form-control" id="inputAddress2" placeholder="Duración estimada">
+      <label for="inputDuration" class="form-label">Duración estimada</label>
+      <input type="time" class="form-control" id="inputDuration" name="inputDuration" placeholder="Duración estimada">
     </div>
     <div class="col-md-4">
-      <label for="inputAddress2" class="form-label">Precio base</label>
-      <input type="text" class="form-control" id="inputAddress2" placeholder="Precio base">
+      <label for="inputPrice" class="form-label">Precio base</label>
+      <input type="number" class="form-control" id="inputPrice" name="inputPrice" placeholder="Precio base">
     </div>
     <div class="col-12 my-4">
       <button type="submit" class="btn btn-primary">Registrar</button>
     </div>
   </form>
 </div>
+
+{% if messages %}
+{% for message in messages %}
+{% if message.type == "error" %}
+<script>
+  Swal.fire("Error", "{{ message }}", "error");
+</script>
+{% elif message.type == "success" %}
+<script>
+  Swal.fire("Success", "{{ message }}", "success")
+</script>
+{% endif %}
+{% endfor %}
+{% endif %}
+
 {% endblock %}

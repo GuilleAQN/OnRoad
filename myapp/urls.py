@@ -4,14 +4,15 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index),
-    path('about/', views.info_view),
-    path("registro_cliente/",views.registro_cliente),
-    path("create_conductor/",views.create_conductor),
-    path("create_ruta/",views.create_ruta),
-    path("create_viaje/",views.create_viaje),
-    path("create_vehiculo/",views.create_vehiculo),
-    path("create_admin/",views.create_admin),
+    path('signout/', views.signout, name="signout"),
+    path('prueba/', views.info_view),
+
+    path("elegir_usuario/", views.elegir_usuario, name="rol_usuario"),
+    path("elegir_usuario/registro_usuario/",
+         views.create_usuario, name="nuevo_usuario"),
+    path("registro_ruta/", views.create_ruta, name="nueva_ruta"),
+    path("registro_viaje/", views.create_viaje, name="nuevo_viaje"),
+    path("registro_vehiculo/", views.create_vehiculo, name="nuevo_vehiculo"),
 ]
 
 if settings.DEBUG:

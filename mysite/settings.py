@@ -26,7 +26,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get(
     'SECRET_KEY', default='-+8$u$dwr4=mua7w91w__foul0z%*j*4_2y07e3!ak(qrk#i6nogdsfd')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = []
@@ -94,11 +93,10 @@ if DATABASE_PROD_URL:
     DATABASES.update(production={
         'ENGINE': 'django.db.backends.postgresql', **dj_database_url.parse(DATABASE_PROD_URL)})
 
-ENVIRONMENT = os.getenv('DJANGO_ENV', 'production')
-DATABASE_CONFIG = DATABASES.get(ENVIRONMENT, DATABASES['production'])
+ENVIRONMENT = os.getenv('DJANGO_ENV', 'development')
+DATABASE_CONFIG = DATABASES.get(ENVIRONMENT, DATABASES['development'])
 
 DATABASES['default'] = DATABASE_CONFIG
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -118,6 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'myapp.Usuarios'
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
