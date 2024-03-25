@@ -1,4 +1,4 @@
-{% extends 'capas/baseadmin.html' %}
+{% extends 'capas/base.html' %}
 
 {% block title %}
   {{ titulo }}
@@ -6,6 +6,11 @@
 
 {% block content %}
   {{ block.super }}
+  <div class="container bg-transparent text-white my-5 p-4  border">
+    <h2>Compra tu ticket</h2>
+    <p>Listado de viajes disponibles</p>
+  </div>
+  <div class="container bg-transparent text-white my-5 p-2  border">
     <div class="container my-5 rounded ">
       <div id="accordion">
         <div class="card my-4  text-black">
@@ -27,6 +32,7 @@
       </div>
     </div>
     
+  </div>
 
 {% endblock %}
 
