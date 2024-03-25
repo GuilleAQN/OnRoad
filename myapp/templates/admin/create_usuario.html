@@ -1,0 +1,107 @@
+{% extends 'capas/baseadmin.html' %}
+
+{% block title %}
+{{ titulo }}
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<div class="container-sm p-4 col-md-6 my-5 bg-info-subtle rounded">
+  {% if rol == "1" %}
+  <h1 class="text-black">Registro de Administradores</h1>
+  <form class="row g-3" action="registro_usuario/" method="POST">
+    {% csrf_token %}
+    <div class="col-md-10">
+      <div class="mb-3 mt-3">
+        <label for="username" class="form-label">Usuario:</label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Digite su usuario"
+          required />
+      </div>
+    </div>
+    {% elif rol == "2" %}
+    <h1 class="text-black">Registro de Clientes</h1>
+    <div class="row">
+      <div class="col-md-6">
+        <label for="inputName" class="form-label">Nombre</label>
+        <input type="text" class="form-control bg-trasnparent" id="inputName" name="inputName"
+          placeholder="Ingrese su nombre" required>
+      </div>
+      <div class="col-md-6">
+        <label for="inputLastName" class="form-label">Apellido</label>
+        <input type="text" class="form-control" id="inputLastName" name="inputLastName"
+          placeholder="Ingrese su apellido" required>
+      </div>
+    </div>
+    <div class="col-12">
+      <label for="inputEmail" class="form-label">Email</label>
+      <input type="email text-body-dark" class="form-control" id="inputEmail" name="inputEmail"
+        placeholder="Ingrese su correo --> tucorreoelectronico@example.com" required>
+    </div>
+    <div class="col-12">
+      <label for="inputPhone" class="form-label">Teléfono</label>
+      <input type="text" class="form-control" id="inputPhone" name="inputPhone" placeholder="Ingrese su teléfono"
+        required>
+    </div>
+    <div class="col-12">
+      <label for="inputCity" class="form-label">Dirección</label>
+      <input type="text" class="form-control" id="inputCity" name="inputCity" placeholder="Ingrese su dirección"
+        required>
+    </div>
+    {% elif rol == "3" %}
+    <h1 class="text-black">Registro de Conductores</h1>
+    <div class="row">
+      <div class="col-md-6">
+        <label for="inputName" class="form-label">Nombre</label>
+        <input type="text" class="form-control bg-trasnparent" id="inputName" name="inputName" placeholder="Nombre(s)">
+      </div>
+      <div class="col-md-6">
+        <label for="inputLastName" class="form-label">Apellido</label>
+        <input type="text" class="form-control" id="inputLastName" name="inputLastName" placeholder="Apellido(s)">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <label for="inputPhone" class="form-label">Teléfono</label>
+        <input type="text" class="form-control" id="inputPhone" name="inputPhone" placeholder="Teléfono/Celular">
+      </div>
+      <div class="col-md-6">
+        <label for="inputLicense" class="form-label">Licencia de conducir</label>
+        <input type="text" class="form-control" id="inputLicense" name="inputLicense"
+          placeholder="Licencia de conducir">
+      </div>
+    </div>
+    <div class="col-md6">
+      <label for="inputCity" class="form-label">Dirección</label>
+      <input type="text" class="form-control" id="inputCity" name="inputCity" placeholder="Dirección">
+    </div>
+    <div class="col-md-12">
+      <label for="inputDateContract" class="form-label">Fecha de contratación</label>
+      <input type="date" class="form-control" id="inputDateContract" name="inputDateContract" placeholder="dd/mm/aaaa">
+    </div>
+    {% endif %}
+    <div class="col-md-10">
+      <label for="inputPassword" class="form-label">Contraseña</label>
+      <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Contraseña"
+        required>
+    </div>
+    <div class="col-12 my-4">
+      <button type="submit" class="btn btn-primary">Registrar</button>
+    </div>
+  </form>
+</div>
+
+{% if messages %}
+{% for message in messages %}
+{% if message.type == "error" %}
+<script>
+  Swal.fire("Error", "{{ message }}", "error");
+</script>
+{% elif message.type == "success" %}
+<script>
+  Swal.fire("Success", "{{ message }}", "success")
+</script>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% endblock %}

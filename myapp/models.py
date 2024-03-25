@@ -1,5 +1,7 @@
-from tabnanny import verbose
+import uuid
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser
+from .managers import CustomUsuarioManager
 
 
 class Clientes(models.Model):
@@ -7,7 +9,7 @@ class Clientes(models.Model):
     nombre = models.CharField(max_length=50, verbose_name='Nombre')
     apellido = models.CharField(max_length=50, verbose_name='Apellido')
     correoelectronico = models.CharField(
-        max_length=100, blank=True, null=True, verbose_name='Correo Electrónico')
+        max_length=100, unique=True, default='', verbose_name='Correo Electrónico')
     telefono = models.CharField(
         max_length=15, blank=True, null=True, verbose_name='Teléfono')
     direccion = models.CharField(
@@ -82,17 +84,37 @@ class Tickets(models.Model):
         db_table = 'tickets'
 
 
-class Usuarios(models.Model):
-    usuarioid = models.UUIDField(primary_key=True, verbose_name='ID')
-    nombreusuario = models.CharField(max_length=50, verbose_name='Nombre')
-    contraseñahash = models.CharField(
-        max_length=128, verbose_name='Contraseña')
+class Usuarios(AbstractBaseUser):
+    usuarioid = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, verbose_name='ID')
+    nombreusuario = models.CharField(
+        max_length=50, unique=True, verbose_name='Nombre de usuario')
+    password = models.CharField(
+        max_length=128, verbose_name='Contraseña', db_column='contraseña')
     estado = models.CharField(
-        max_length=10, blank=True, null=True, verbose_name='Estado')
+        max_length=10, blank=True, null=True, default='Activo', verbose_name='Estado')
     rolid = models.ForeignKey(Roles, models.DO_NOTHING,
                               db_column='rolid', verbose_name='ID del Rol')
     fechacreacion = models.DateTimeField(
-        blank=True, null=True, verbose_name='Fecha de creación')
+        auto_now_add=True, verbose_name='Fecha de creación')
+
+    objects = CustomUsuarioManager()
+
+    USERNAME_FIELD = 'nombreusuario'
+    REQUIRED_FIELDS = ['rolid']
+
+    def __str__(self):
+        return self.nombreusuario
+
+    def has_perm(self, perm, obj=None):
+        return True
+
+    def has_module_perms(self, app_label):
+        return True
+
+    @property
+    def is_staff(self):
+        return self.rolid.nombrerol == 'Administrador'
 
     class Meta:
         app_label = 'myapp'
@@ -135,3 +157,13 @@ class Viajes(models.Model):
     class Meta:
         app_label = 'myapp'
         db_table = 'viajes'
+
+
+def generar_nombre_usuario(nombre, apellido):
+    suffix = 1
+    nombre_usuario = nombre.split()[0] + apellido.split()[0][0]
+    while True:
+        if not Usuarios.objects.filter(nombreusuario=nombre_usuario).exists():
+            return nombre_usuario
+        suffix += 1
+        nombre_usuario = f"{nombre_usuario}{suffix}"

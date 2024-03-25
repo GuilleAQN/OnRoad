@@ -1,11 +1,11 @@
-{% extends 'capas/base.html' %}
+{% extends rol %}
 
 {% block title %}
 {{ titulo }}
 {% endblock %}
 
 {% block content %}
-
+{{ block.super }}
 <div class="bg'dark">
   <div class="container-sm p-5 my-5 bg-info-subtle text-black">
     <form action="/action_page.php">
