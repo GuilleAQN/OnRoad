@@ -1,0 +1,38 @@
+{% extends 'capas/base.html' %}
+
+{% block title %}
+  {{ titulo }}
+{% endblock %}
+
+{% block content %}
+  {{ block.super }}
+  <div class="container bg-transparent text-white my-5 p-4  border">
+    <h2>Compra tu ticket</h2>
+    <p>Listado de viajes disponibles</p>
+  </div>
+  <div class="container bg-transparent text-white my-5 p-2  border">
+    <div class="container my-5 rounded ">
+      <div id="accordion">
+        <div class="card my-4  text-black">
+          <div class="card-header bg-white text-black d-flex justify-content-between align-items-center">
+            <a class="btn text-black" data-bs-toggle="collapse" href="#collapseOne">Viaje </a>
+            <div class="align-items-right">
+            <a class="btn text-bg-green text-white"  href="#collapseOne"><button type="button" class="btn btn-danger">Comprar ticket</button></a>
+          </div>
+          </div>
+          <div id="collapseOne" class="collapse show bg-info-subtle text-white" data-bs-parent="#accordion">
+            <div class="card-body text-black">Lugar de salida: </div>
+            <div class="card-body text-black">Lugar de llegada: </div>
+            <div class="card-body text-black">Hora de salida: </div>
+            <div class="card-body text-black">Hora de llegada: </div>            
+            <div class="card-body text-black">Precio: </div>
+            <div class="card-body text-black">Cupos disponibles: </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+{% endblock %}
+

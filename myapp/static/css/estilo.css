@@ -31,6 +31,14 @@
   right: 0px;
 }
 
+#register{
+  color: blue;
+}
+
+h6{
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+}
+
 a {
   text-decoration: none;
   text-decoration-line: none;
@@ -38,6 +46,9 @@ a {
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
 }
 
+#footer {
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+}
 .navbar-brand {
   position: relative;
   top: 0px;
