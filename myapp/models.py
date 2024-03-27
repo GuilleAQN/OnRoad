@@ -178,11 +178,10 @@ class Viajes(models.Model):
 
 
 def generar_nombre_usuario(nombre, apellido):
-    contador = 1
+    id = uuid.uuid4()
+    print(id)
     usuario = nombre.split()[0] + apellido.split()[0][0]
 
-    while Usuarios.objects.filter(nombreusuario=usuario).exists():
-        usuario = f"{usuario}{contador}"
-        contador += 1
+
 
     return usuario

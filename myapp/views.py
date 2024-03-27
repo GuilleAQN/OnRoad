@@ -5,7 +5,7 @@ from .backends import CustomAuthBackend
 from django.contrib import messages
 from django.http import JsonResponse
 from .models import Usuarios, Conductores, Vehiculos, Rutas, Viajes, Roles, Tickets, generar_nombre_usuario
-from .forms import SignInForm, NuevoUsuarioForm, NuevoAdminForm, NuevoClienteForm, NuevoConductorForm,  NuevoViajesForm, NuevoVehiculoForm, NuevaRutaForm
+from .forms import SignInForm, SignUpForm, NuevoUsuarioForm, NuevoAdminForm, NuevoClienteForm, NuevoConductorForm,  NuevoViajesForm, NuevoVehiculoForm, NuevaRutaForm
 
 
 def signin(request):
@@ -28,7 +28,7 @@ def signin(request):
 
 def signup(request):
     if request.method == "GET":
-        formUsuario = NuevoUsuarioForm()
+        formUsuario = SignUpForm()
         formCliente = NuevoClienteForm()
         return render(request, "signup.html", {"formUsuario": formUsuario, "formCliente": formCliente})
     else:

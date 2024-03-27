@@ -10,6 +10,36 @@ class SignInForm(forms.Form):
         attrs={'id': 'contraseña', 'class': 'form-control', 'placeholder': 'Introduzca su contraseña'}))
 
 
+class SignUpForm(forms.ModelForm):
+    confirmar_contraseña = forms.CharField(widget=forms.PasswordInput(
+        attrs={'id': 'contraseñaConfirmacion', 'class': 'form-control', 'placeholder': 'Repita su contraseña'}))
+
+    class Meta:
+        model = Usuarios
+        fields = ['password', ]
+        widgets = {
+            'password': forms.PasswordInput(attrs={'id': 'contraseña', 'class': 'form-control', 'placeholder': 'Introduzca su contraseña'}),
+        }
+
+    def clean(self):
+        data_limpia = super().clean()
+        contraseña = data_limpia.get('password')
+        confirmar_contraseña = data_limpia.get('confirmar_contraseña')
+
+        if contraseña != confirmar_contraseña:
+            raise forms.ValidationError("Las contraseñas no coinciden.")
+
+        return data_limpia
+
+    def save(self, commit=True, rol=1):
+        usuario = super().save(commit=False)
+        usuario.rolid = Roles.objects.get(rolid=rol)
+        usuario.password = make_password(self.clean()['password'])
+        if commit:
+            usuario.save()
+        return usuario
+
+
 class NuevoUsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuarios
