@@ -23,8 +23,10 @@ from myapp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.signin, name='signin'),
+    path('signout/', views.signout, name='signout'),
     path('registro/', views.signup, name="signup"),
     path('home/', views.pagina_principal, name='pagina_principal'),
+
     path('', include('myapp.urls')),
 ]
 

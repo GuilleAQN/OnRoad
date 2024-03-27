@@ -40,6 +40,7 @@ def signup(request):
             apellido = formCliente.cleaned_data['apellido']
 
             nombre_usuario = generar_nombre_usuario(nombre, apellido)
+            print(nombre_usuario)
 
             cliente = formCliente.save(commit=False)
             usuario = formUsuario.save(commit=False, rol=2)
