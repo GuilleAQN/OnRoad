@@ -41,12 +41,12 @@ def signup(request):
 
             nombre_usuario = generar_nombre_usuario(nombre, apellido)
 
-            cliente = formCliente.save(commit=False)
             usuario = formUsuario.save(commit=False, rol=2)
+            cliente = formCliente.save(commit=False)
 
             usuario.nombreusuario = nombre_usuario
-            cliente.save()
             usuario.save()
+            cliente.save()
 
             login(request, usuario)
             return redirect('pagina_principal')
@@ -128,13 +128,16 @@ def create_usuario(request):
             if formUsuario.is_valid() and formCliente.is_valid():
                 nombre = formCliente.cleaned_data['nombre']
                 apellido = formCliente.cleaned_data['apellido']
+                print(nombre)
 
-                nombre_usuario = generar_nombre_usuario(nombre, apellido)
+                nombre_usuario = generar_nombre_usuario(nombre=nombre, apellido=apellido)
+                print(nombre_usuario)
 
                 cliente = formCliente.save(commit=False)
                 usuario = formUsuario.save(commit=False, rol=2)
 
                 usuario.nombreusuario = nombre_usuario
+                print(usuario.nombreusuario)
                 cliente.save()
                 usuario.save()
 
