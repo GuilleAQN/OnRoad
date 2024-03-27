@@ -178,10 +178,7 @@ class Viajes(models.Model):
 
 
 def generar_nombre_usuario(nombre, apellido):
-    id = uuid.uuid4()
-    print(id)
+    semilla = uuid.uuid4()
+    sufijo = str(semilla)[:5]
     usuario = nombre.split()[0] + apellido.split()[0][0]
-
-
-
-    return usuario
+    return f'{usuario}#{sufijo}'
