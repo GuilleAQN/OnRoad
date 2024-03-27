@@ -1,63 +1,49 @@
 {% extends 'capas/base.html' %}
-
-{% block title %}
-{{ titulo }}
-{% endblock %}
-
+{% block title %}Registro{% endblock %}
 {% block content %}
+<div class="container-sm col-md-8 my-5 bg-info-subtle rounded">
+  <h2 class="text-black">Registro</h2>
+  <form class="row g-3" method="POST">
+    {% csrf_token %}
+    <div class="col-md-6">
+      <label for="nombre" class="form-label">Nombre</label>
+      {{ formCliente.nombre }}
+    </div>
+    <div class="col-md-6">
+      <label for="apellido" class="form-label">Apellido</label>
+      {{ formCliente.apellido }}
+    </div>
+    <div class="col-12">
+      <label for="correoElectronico" class="form-label">Email</label>
+      {{ formCliente.correoelectronico }}
+    </div>
+    <div class="col-12">
+      <label for="telefono" class="form-label">Teléfono</label>
+      {{ formCliente.telefono }}
+    </div>
+    <div class="col-12">
+      <label for="direccion" class="form-label">Dirección</label>
+      {{ formCliente.direccion }}
+    </div>
+    <div class="col-md-6">
+      <label for="contraseña" class="form-label">Contraseña</label>
+      {{ formUsuario.password }}
+    </div>
+    <div class="col-md-6">
+      <label for="contraseñaConfirmacion" class="form-label">Confirmar contraseña</label>
+      {{ formUsuario.confirmar_contraseña }}
+    </div>
+    <div class="col-12 my-4">
+      <button type="submit" class="btn btn-primary">Registrarse</button>
+    </div>
+  </form>
+</div>
 
-<body>
-  <div class="container-sm col-md-8 my-5 bg-info-subtle rounded">
-    <h1 class="text-black">Registro</h1>
-    <form class="row g-3" method="POST">
-      {% csrf_token %}
-      <div class="col-md-6">
-        <label for="inputName" class="form-label">Nombre</label>
-        <input type="text" class="form-control bg-trasnparent" id="inputName" name="inputName"
-          placeholder="Ingrese su nombre" required>
-      </div>
-      <div class="col-md-6">
-        <label for="inputLastName" class="form-label">Apellido</label>
-        <input type="text" class="form-control" id="inputLastName" name="inputLastName"
-          placeholder="Ingrese su apellido" required>
-      </div>
-      <div class="col-12">
-        <label for="inputEmail" class="form-label">Email</label>
-        <input type="email text-body-dark" class="form-control" id="inputEmail" name="inputEmail"
-          placeholder="Ingrese su correo --> tucorreoelectronico@example.com" required>
-      </div>
-      <div class="col-12">
-        <label for="inputPhone" class="form-label">Teléfono</label>
-        <input type="text" class="form-control" id="inputPhone" name="inputPhone" placeholder="Ingrese su teléfono"
-          required>
-      </div>
-      <div class="col-12">
-        <label for="inputCity" class="form-label">Dirección</label>
-        <input type="text" class="form-control" id="inputCity" name="inputCity" placeholder="Ingrese su dirección"
-          required>
-      </div>
-      <div class="col-md-6">
-        <label for="inputPassword" class="form-label">Contraseña</label>
-        <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Contraseña"
-          required>
-      </div>
-      <div class="col-md-6">
-        <label for="inputPasswordConfirm" class="form-label">Confirmar contraseña</label>
-        <input type="password" class="form-control" id="inputPasswordConfirm" name="inputPasswordConfirm"
-          placeholder="Repita la contraseña" required>
-      </div>
-      <div class="col-12 my-4">
-        <button type="submit" class="btn btn-primary">Registrarse</button>
-      </div>
-    </form>
-  </div>
-
-  {% if messages %}
-  {% for message in messages %}
-  <script>
-    Swal.fire("Error", "{{ message }}", "error");
-  </script>
-  {% endfor %}
-  {% endif %}
-
-  {% endblock %}
+{% if messages %} 
+{% for message in messages %}
+<script>
+  Swal.fire("Error", "{{ message }}", "error");
+</script>
+{% endfor %}
+{% endif %}
+{% endblock %}

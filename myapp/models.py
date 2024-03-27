@@ -1,7 +1,14 @@
 import uuid
+from enum import Enum
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from .managers import CustomUsuarioManager
+
+
+class EstadoVehiculo(Enum):
+    DISPONIBLE = 'Disponible'
+    OCUPADO = 'Ocupado'
+    MANTENIMIENTO = 'Mantenimiento'
 
 
 class Clientes(models.Model):
@@ -37,6 +44,9 @@ class Conductores(models.Model):
     usuarioid = models.OneToOneField(
         'Usuarios', models.DO_NOTHING, db_column='usuarioid', blank=True, null=True)
 
+    def __str__(self):
+        return f"{self.nombre} {self.apellido} ({self.licenciaconducir})"
+
     class Meta:
         app_label = 'myapp'
         db_table = 'conductores'
@@ -60,6 +70,9 @@ class Rutas(models.Model):
     duracionestimada = models.DurationField(verbose_name='Duración estimada')
     preciobase = models.DecimalField(
         max_digits=10, decimal_places=2, verbose_name='Precio base de la ruta')
+
+    def __str__(self):
+        return f"{self.origen} - {self.destino}"
 
     class Meta:
         app_label = 'myapp'
@@ -131,10 +144,15 @@ class Vehiculos(models.Model):
         blank=True, null=True, verbose_name='Año de Fabriación')
     placa = models.CharField(unique=True, max_length=20,
                              blank=True, null=True, verbose_name='No. de Placa')
+    estado_opciones = [(estado.value, estado.name)
+                       for estado in EstadoVehiculo]
     estado = models.CharField(
-        max_length=15, blank=True, null=True, verbose_name='Estado')
+        max_length=15, blank=True, null=True, choices=estado_opciones, default=EstadoVehiculo.DISPONIBLE.value, verbose_name='Estado')
     conductorid = models.ForeignKey(
         Conductores, models.DO_NOTHING, db_column='conductorid', blank=True, null=True, verbose_name='ID del Conductor')
+
+    def __str__(self):
+        return f"{self.modelo} {self.marca} del {self.anofabricacion} ({self.placa})"
 
     class Meta:
         app_label = 'myapp'
@@ -160,10 +178,11 @@ class Viajes(models.Model):
 
 
 def generar_nombre_usuario(nombre, apellido):
-    suffix = 1
-    nombre_usuario = nombre.split()[0] + apellido.split()[0][0]
-    while True:
-        if not Usuarios.objects.filter(nombreusuario=nombre_usuario).exists():
-            return nombre_usuario
-        suffix += 1
-        nombre_usuario = f"{nombre_usuario}{suffix}"
+    contador = 1
+    usuario = nombre.split()[0] + apellido.split()[0][0]
+
+    while Usuarios.objects.filter(nombreusuario=usuario).exists():
+        usuario = f"{usuario}{contador}"
+        contador += 1
+
+    return usuario

@@ -3,62 +3,71 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} {% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="{% static '/css/estilo.css' %}" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %} {% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="{% static '/css/estilo.css' %}" />
 </head>
 
 <body class="bg-secondary">
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark" id="nave">
-        <div class="container-fluid">
-            <a class="navbar-brand"  href="{% url "venta" %}">
-                <img src="{% static '/img/im.webp' %}" alt="Foto personal" style="width:100px;" class="rounded-pill">
-                <div class="nombre">
-                    OnRoad
-                </div>
-            </div>
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark" id="nave">
+    <div class="container-fluid">
+      {% if request.session %}
+      <a class="navbar-brand" href="/home/">
+      {% else %}
+        <a class="navbar-brand">
+      {% endif %}
+          <img src="{% static '/img/im.webp' %}" alt="Logo de OnRoad" style="width:100px;" class="rounded-pill">
+          <h1 class="nombre text-white">OnRoad</h1>
+        </a>
+      {% if request.path == '/' %}
+        <a class="btn btn-success custim-btn" href="/registro/">Registrarse</a>
+      {% elif request.path == '/registro/' %}
+        <a class="btn btn-success custim-btn" href="/">Volver al Inicio de Sesión</a>
+      {% elif request.user.is_authenticated %}
+        <div class="dropdown">
+          <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            {{ usuario.nombreusuario }}
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item" href="/perfil/{{ usuario.usuarioid }}">Perfil</a></li>
+            <li><a class="dropdown-item" href="/signout/">Cerrar sesión</a></li>
+          </ul>
         </div>
-    </nav>
-    <nav class="navbar navbar-expand-sm bg-info-subtle justify-content-center">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Mis tickets</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url "venta" %}">Comprar ticket</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Mi perfil</a>
-          </li>
-        </ul>
-      </nav>
-    {% block content %}
-
-    {% endblock %}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-</body>
-
-<nav class="navbar navbar-expand-sm bg-info-subtle justify-content-center">
-  <ul class="navbar-nav d-flex w-100">
-    <li class="nav-item flex-fill text-center">
-      <a class="nav-link d-block" href="#">Ángel de la Cruz 21-1380 || Omar Aquino 21-0689</a>
-      
-    </li>
-    <li class="nav-item flex-fill text-center">
-      <a class="nav-link d-block" href="#">Proyecto final LP1</a>
-    </li>
-    <li class="nav-item flex-fill text-center">
-      <a class="nav-link d-block" href="#">Página Web para gestión de compra de tickets</a>
-    </li>
-  </ul>
+    </div>
+  </nav>
+  <nav class="navbar navbar-expand-sm bg-info-subtle justify-content-center">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="#">Mis tickets</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="">Comprar ticket</a>
+      </li>
+    </ul>
+  {% endif %}
 </nav>
+  {% block content %}
 
+  {% endblock %}
+  <div class="container">
+    <footer class="py-3 my-4">
+      <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+        <li class="text-white"><a class="text-black px-2">Ángel de la Cruz 21-1380</a></li>
+        <li class="text-white"><a class="text-black px-2">Omar Aquino 21-0689</a></li>
+      </ul>
+      <p class="text-center text-black">Página Web para gestión de compra de tickets - Proyecto final LP1</p>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+</body>
 
 </html>

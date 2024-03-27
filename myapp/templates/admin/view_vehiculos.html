@@ -1,37 +1,47 @@
 {% extends 'capas/baseadmin.html' %}
 
 {% block title %}
-{{ titulo }}
+  Vehiculos
 {% endblock %}
 
 {% block content %}
-{{ block.super }}
-<div class="container my-5 rounded ">
-  <div id="accordion">
-    {% for vehiculo in vehiculos %}
-    <div class="card my-4  text-black">
-      <div class="card-header bg-white text-black d-flex justify-content-between align-items-center">
-        <a class="btn text-black" data-bs-toggle="collapse" href="#collapseOne">Vehículo {{ vehiculo.vehiculoid }}</a>
-        <div class="align-items-right">
-          <a class="btn text-bg-red text-white" href="eliminar_vehiculo/" alt="Eliminar" title="Eliminar"><i
-              class="fa-solid fa-trash" style="color: #cf2507;"></i></a>
-          <a class="btn text-bg-green text-white" href="editar_vehiculo/" alt=" Editar" title="Editar"><i class="
-            fa-solid fa-pen-to-square" style="color: #296ce0;"></i></a>
+  {{ block.super }}
+  <div class="container my-5 rounded">
+    <div id="accordion">
+      {% for vehiculo in vehiculos %}
+        <div class="card my-4 text-black">
+          <div class="card-header bg-white text-black d-flex justify-content-between align-items-center">
+            <a class="btn text-black" data-bs-toggle="collapse" href="#collapse{{ forloop.counter }}">Vehículo {{ vehiculo.vehiculoid }}</a>
+            <div class="align-items-right">
+              <a class="btn text-bg-red text-white" href="eliminar_vehiculo/" alt="Eliminar" title="Eliminar"><i class="fa-solid fa-trash" style="color: #cf2507;"></i></a>
+              <a class="btn text-bg-green text-white" href="editar_vehiculo/" alt=" Editar" title="Editar"><i class="fa-solid fa-pen-to-square" style="color: #296ce0;"></i></a>
+            </div>
+          </div>
+          <div id="collapse{{ forloop.counter }}" class="collapse bg-info-subtle text-white" data-bs-parent="#accordion">
+            <div class="card-body text-black">
+              <strong>Marca</strong>: {{ vehiculo.marca }}
+            </div>
+            <div class="card-body text-black">
+              <strong>Modelo</strong>: {{ vehiculo.modelo }}
+            </div>
+            <div class="card-body text-black">
+              <strong>Capacidad</strong>: {{ vehiculo.capacidad }}
+            </div>
+            <div class="card-body text-black">
+              <strong>Año fabricación</strong>: {{ vehiculo.anofabricacion }}
+            </div>
+            <div class="card-body text-black">
+              <strong>Placa</strong>: {{ vehiculo.placa }}
+            </div>
+            <div class="card-body text-black">
+              <strong>Estado</strong>: {{ vehiculo.estado }}
+            </div>
+            <div class="card-body text-black">
+              <strong>Identificador del conductor</strong>: {{ vehiculo.conductorid.nombre }} {{ vehiculo.conductorid.apellido }} ({{ vehiculo.conductorid.licenciaconducir }})
+            </div>
+          </div>
         </div>
-      </div>
-      <div id="collapseOne" class="collapse show bg-info-subtle text-white" data-bs-parent="#accordion">
-        <div class="card-body text-black">Marca: {{ vehiculo.marca }}</div>
-        <div class="card-body text-black">Modelo: {{ vehiculo.modelo }}</div>
-        <div class="card-body text-black">Capacidad: {{ vehiculo.capacidad }}</div>
-        <div class="card-body text-black">Año fabricación: {{ vehiculo.anofabricacion }}</div>
-        <div class="card-body text-black">Placa: {{ vehiculo.placa }}</div>
-        <div class="card-body text-black">Estado: {{ vehiculo.estado }}</div>
-        <div class="card-body text-black">Identificador del conductor: {{ vehiculo.conductorid.nombre }} {{ vehiculo.conductorid.apellido }} ({{ vehiculo.conductorid.conductorid }})</div>
-      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
   </div>
-</div>
-
-
 {% endblock %}

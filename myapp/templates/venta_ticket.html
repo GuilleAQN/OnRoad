@@ -1,8 +1,6 @@
 {% extends 'capas/baseadmin.html' %}
 
-{% block title %}
-{{ titulo }}
-{% endblock %}
+{% block title %}Comprar Tickets{% endblock %}
 
 {% block content %}
 {{ block.super }}
@@ -12,13 +10,13 @@
     <div class="card my-4 text-black">
       <div class="card-header bg-white text-black d-flex justify-content-between align-items-center">
 
-        <a class="btn text-black" data-bs-toggle="collapse" href="#collapseOne">Viaje {{ viaje.viajeid }}</a>
+        <a class="btn text-black" data-bs-toggle="collapse" href="#collapse{{ forloop.counter }}">Viaje {{ viaje.viajeid }}</a>
         <div class="align-items-right">
           <a class="btn text-bg-green text-white" href="comprar_ticket/" alt="Comprar" title="Comprar"><i
               class="fa-solid fa-money-bill" style="color: #10bc5b;"></i></a>
         </div>
       </div>
-      <div id="collapseOne" class="collapse show bg-info-subtle text-white" data-bs-parent="#accordion">
+      <div id="collapse{{ forloop.counter }}" class="collapse bg-info-subtle text-white" data-bs-parent="#accordion">
         <div class="card-body text-black">Identificador de la ruta: {{ viaje.viajeid }}</div>
         <div class="card-body text-black">Identificador del vehículo: {{ viaje.vehiculoid.placa }}</div>
         <div class="card-body text-black">Fecha y hora de salida: {{ viaje.fechahorasalida }}</div>
