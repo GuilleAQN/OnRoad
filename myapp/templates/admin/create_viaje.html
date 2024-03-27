@@ -1,34 +1,34 @@
 {% extends 'capas/baseadmin.html' %}
 
 {% block title %}
-  Nueva Ruta
+  Nuevo Viaje
 {% endblock %}
 
 {% block content %}
   {{ block.super }}
   <div class="container-sm col-md-8 my-5 bg-info-subtle rounded">
-    <h1 class="text-black">Registro de rutas</h1>
+    <h1 class="text-black">Registro de viajes</h1>
     <form class="row g-3" method="POST">
       {% csrf_token %}
       <div class="col-md-6">
-        <label for="origen" class="form-label">Lugar de origen</label>
-        {{ form.origen }}
+        <label for="rutas" class="form-label">Ruta</label>
+        {{ form.rutaid }}
       </div>
       <div class="col-md-6">
-        <label for="destino" class="form-label">Lugar de destino</label>
-        {{ form.destino }}
+        <label for="vehiculos" class="form-label">Vehiculo</label>
+        {{ form.vehiculoid }}
       </div>
-      <div class="col-md-4">
-        <label for="distancia" class="form-label">Distancia (kms)</label>
-        {{ form.distancia }}
+      <div class="col-md-6">
+        <label for="fechaHoraSalida" class="form-label">Fecha y Hora de salida</label>
+        {{ form.fechahorasalida }}
       </div>
-      <div class="col-md-4">
-        <label for="duracionEstimada" class="form-label">Duración estimada</label>
-        {{ form.duracionestimada }}
+      <div class="col-md-6">
+        <label for="fechaHoraLlegada" class="form-label">Fecha y Hora de llegada</label>
+        {{ form.fechahorallegadaestimada }}
       </div>
-      <div class="col-md-4">
-        <label for="precioBase" class="form-label">Precio base</label>
-        {{ form.preciobase }}
+      <div class="col-md-6">
+        <label for="cuposy" class="form-label">Cupos totales</label>
+        {{ form.cuposdisponibles }}
       </div>
       <div class="col-12 my-4">
         <button type="submit" class="btn btn-primary">Registrar</button>
@@ -44,7 +44,7 @@
         </script>
       {% elif message.tags == 'success' %}
         <script>
-          Swal.fire('Success', '{{ message }}', 'success')
+          Swal.fire('Exitó', '{{ message }}', 'success')
         </script>
       {% endif %}
     {% endfor %}

@@ -1,325 +1,289 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
-from django.urls import reverse
-from django.contrib.auth.hashers import make_password
-from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 from .backends import CustomAuthBackend
 from django.contrib import messages
 from django.http import JsonResponse
-from .models import Usuarios, Clientes, Roles, Conductores, Rutas, Vehiculos, Viajes, generar_nombre_usuario
+from .models import Usuarios, Conductores, Vehiculos, Rutas, Viajes, Roles, Tickets, generar_nombre_usuario
+from .forms import SignInForm, NuevoUsuarioForm, NuevoAdminForm, NuevoClienteForm, NuevoConductorForm,  NuevoViajesForm, NuevoVehiculoForm, NuevaRutaForm
 
 
 def signin(request):
     if request.method == "GET":
-        titulo = "OnRoad"
-        return render(request, "signin.html", {"titulo": titulo})
+        form = SignInForm()
+        return render(request, "signin.html", {"form": form})
     else:
-        username = request.POST.get('username')
-        password = request.POST.get('pwd')
-
-        usuario = CustomAuthBackend.authenticate(
-            nombre_usuario=username, contraseña=password)
-
-        if usuario is not None:
-            login(request, usuario)
-            return redirect('pagina_principal')
-
-        else:
-            messages.error(request, 'El usuario o contraseña no existen.')
-            return redirect('signin')
+        form = SignInForm(request.POST)
+        print(form.errors)
+        if form.is_valid():
+            usuario = form.cleaned_data['usuario']
+            contraseña = form.cleaned_data['contraseña']
+            usuario = CustomAuthBackend.authenticate(
+                nombre_usuario=usuario, contraseña=contraseña)
+            if usuario is not None:
+                login(request, usuario)
+                return redirect('pagina_principal')
+        return render(request, "signin.html", {"form": form})
 
 
 def signup(request):
     if request.method == "GET":
-        titulo = "Nuevo Usuario"
-        return render(request, "signup.html", {"titulo": titulo})
+        formUsuario = NuevoUsuarioForm()
+        formCliente = NuevoClienteForm()
+        return render(request, "signup.html", {"formUsuario": formUsuario, "formCliente": formCliente})
     else:
-        if request.POST['inputPassword'] == request.POST['inputPasswordConfirm']:
-            try:
-                contraseña_hasheada = make_password(
-                    request.POST['inputPassword'])
-                nombre_usuario = generar_nombre_usuario(
-                    request.POST['inputName'], request.POST['inputLastName'])
+        formUsuario = NuevoUsuarioForm(request.POST)
+        formCliente = NuevoClienteForm(request.POST)
 
-                rol = Roles.objects.get(pk=2)
+        if formUsuario.is_valid() and formCliente.is_valid():
+            nombre = formCliente.cleaned_data['nombre']
+            apellido = formCliente.cleaned_data['apellido']
 
-                usuario = Usuarios(
-                    nombreusuario=nombre_usuario,
-                    password=contraseña_hasheada,
-                    rolid=rol
-                )
-                usuario.save()
+            nombre_usuario = generar_nombre_usuario(nombre, apellido)
 
-                cliente = Clientes.objects.create(
-                    nombre=request.POST['inputName'],
-                    apellido=request.POST['inputLastName'],
-                    correoelectronico=request.POST['inputEmail'],
-                    telefono=request.POST['inputPhone'],
-                    direccion=request.POST['inputCity'],
-                    usuarioid=usuario
-                )
-                cliente.save()
+            cliente = formCliente.save(commit=False)
+            usuario = formUsuario.save(commit=False, rol=2)
 
-                return redirect('pagina_principal')
+            usuario.nombreusuario = nombre_usuario
+            cliente.save()
+            usuario.save()
 
-            except IntegrityError:
-                messages.error(
-                    request, 'Este correo ya ha sido utilizado, favor usar un correo diferente por cuenta.')
-            return redirect('signup')
-        else:
-            messages.error(
-                request, 'Las contraseñas no coinciden. Por favor, inténtalo de nuevo.')
-            return redirect('signup')
+            login(request, usuario)
+            return redirect('pagina_principal')
+
+        messages.error(
+            request, 'Ha ocurrido un error, por favor intente de nuevo.')
+        return render(request, "signup.html", {"formUsuario": formUsuario, "formCliente": formCliente})
 
 
-@login_required(login_url='/')
-def info_view(request):
-    objects = Usuarios.objects.all()
+# @login_required
+# def info_view(request):
+#     objects = Usuarios.objects.all()
 
-    data = [{'Id': obj.usuarioid, 'Nombre': obj.nombreusuario}
-            for obj in objects]
+#     data = [{'Id': obj.usuarioid, 'Nombre': obj.nombreusuario}
+#             for obj in objects]
 
-    return JsonResponse({'Respuestas': data})
+#     return JsonResponse({'Respuestas': data})
 
 
-@login_required(login_url='/')
+@login_required
 def pagina_principal(request):
-    titulo = "OnRoad"
-    rol = "capas/baseadmin.html" if request.user.rolid.rolid == 1 else "capas/baseusuario.html"
+    rol = "capas/baseadmin.html" if request.user.rolid.rolid == 1 else "capas/base.html"
+    print(rol)
 
     return render(request, "index.html", {
-        'titulo': titulo,
-        'rol': rol
+        'rol': rol,
+        'usuario': request.user
     })
 
 
-@login_required(login_url='/')
+@login_required
 def signout(request):
     logout(request)
     return redirect('signin')
 
 
-@login_required(login_url='/')
+@login_required
 def elegir_usuario(request):
     roles = Roles.objects.all()
-    return render(request, "admin/elegir_usuario.html", {"roles": roles})
+    return render(request, "admin/elegir_usuario.html", {"roles": roles, "usuario": request.user})
 
 
-@login_required(login_url='/')
+@login_required
 def create_usuario(request):
+    rol = request.GET.get('inputRoles')
     if request.method == "GET":
-        titulo = "Nuevo Usuario"
-        print(request.GET.get('inputRoles'))
-        return render(request, "admin/create_usuario.html", {"titulo": titulo, "rol": request.GET.get('inputRoles')})
+        if rol == '1':
+            form = NuevoAdminForm()
+        elif rol == '2':
+            formUsuario = NuevoUsuarioForm()
+            formCliente = NuevoClienteForm()
+        else:
+            formUsuario = NuevoUsuarioForm()
+            formConductor = NuevoConductorForm()
+
+        return render(request, "admin/create_usuario.html", {
+            "usuario": request.user,
+            "rol": rol,
+            "form": form if rol == '1' else None,
+            "formUsuario": formUsuario if rol == '2' or rol == '3' else None,
+            "formCliente": formCliente if rol == '2' else None,
+            "formConductor": formConductor if rol != '1' and rol != '2' else None
+        })
+
     else:
-        if request.GET.get('inputRoles') == '1':
-            try:
-                contraseña_hasheada = make_password(
-                    request.POST['pwd'])
+        if request.GET.get('rol') == '1':
+            form = NuevoAdminForm(request.POST)
+            if form.is_valid():
+                form.save()
 
-                rol = Roles.objects.get(pk=1)
+                messages.success(
+                    request, 'Se ha registrado el usuario de manera exitosa.')
+                return redirect('rol_usuario')
 
-                usuario = Usuarios(
-                    nombreusuario=request.POST['username'],
-                    password=contraseña_hasheada,
-                    rolid=rol
-                )
-                usuario.save()
+        if request.GET.get('rol') == '2':
+            formUsuario = NuevoUsuarioForm(request.POST)
+            formCliente = NuevoClienteForm(request.POST)
 
-            except IntegrityError:
-                messages.error(
-                    request, 'Ha ocurrido un error, por favor intente de nuevo.')
-                return render(request, "admin/create_usuario.html", {"rol": 1})
+            if formUsuario.is_valid() and formCliente.is_valid():
+                nombre = formCliente.cleaned_data['nombre']
+                apellido = formCliente.cleaned_data['apellido']
 
-        elif request.GET.get('inputRoles') == 2:
-            try:
-                contraseña_hasheada = make_password(
-                    request.POST['inputPassword'])
-                nombre_usuario = generar_nombre_usuario(
-                    request.POST['inputName'], request.POST['inputLastName'])
+                nombre_usuario = generar_nombre_usuario(nombre, apellido)
 
-                rol = Roles.objects.get(pk=2)
+                cliente = formCliente.save(commit=False)
+                usuario = formUsuario.save(commit=False, rol=2)
 
-                usuario = Usuarios(
-                    nombreusuario=nombre_usuario,
-                    password=contraseña_hasheada,
-                    rolid=rol
-                )
-                usuario.save()
-
-                cliente = Clientes.objects.create(
-                    nombre=request.POST['inputName'],
-                    apellido=request.POST['inputLastName'],
-                    correoelectronico=request.POST['inputEmail'],
-                    telefono=request.POST['inputPhone'],
-                    direccion=request.POST['inputCity'],
-                    usuarioid=usuario
-                )
+                usuario.nombreusuario = nombre_usuario
                 cliente.save()
-
-                return redirect('pagina_principal')
-
-            except IntegrityError:
-                messages.error(
-                    request, 'Ha ocurrido un error, por favor intente de nuevo.\n Recomendación: Use un correo distinto')
-                return render(request, "admin/create_usuario.html", {"rol": 2})
-
-        elif request.GET.get('inputRoles') == 3:
-            try:
-                contraseña_hasheada = make_password(
-                    request.POST['inputPassword'])
-                nombre_usuario = generar_nombre_usuario(
-                    request.POST['inputName'], request.POST['inputLastName'])
-
-                rol = Roles.objects.get(pk=request.GET.get('inputRoles'))
-
-                usuario = Usuarios(
-                    nombreusuario=nombre_usuario,
-                    contraseñahash=contraseña_hasheada,
-                    rolid=rol
-                )
                 usuario.save()
 
-                conductor = Conductores.objects.create(
-                    nombre=request.POST['inputName'],
-                    apellido=request.POST['inputLastName'],
-                    telefono=request.POST['inputPhone'],
-                    direccion=request.POST['inputCity'],
-                    licenciaconducir=request.POST['inputLicense'],
-                    fechacontratacion=request.POST['inputDateContract'],
-                    usuarioid=usuario
-                )
-                conductor.save()
+                messages.success(
+                    request, 'Se ha registrado el usuario de manera exitosa.')
+                return redirect('rol_usuario')
 
-            except IntegrityError:
-                messages.error(
-                    request, 'Ha ocurrido un error, por favor intente de nuevo.')
-                return render(request, "admin/create_usuario.html", {"rol": 3})
+        else:
+            formUsuario = NuevoUsuarioForm(request.POST)
+            formConductor = NuevoConductorForm(request.POST)
+
+            if formUsuario.is_valid() and formConductor.is_valid():
+                nombre = formConductor.cleaned_data['nombre']
+                apellido = formConductor.cleaned_data['apellido']
+
+                nombre_usuario = generar_nombre_usuario(nombre, apellido)
+
+                conductor = formConductor.save(commit=False)
+                usuario = formUsuario.save(commit=False, rol=3)
+
+                usuario.nombreusuario = nombre_usuario
+                conductor.save()
+                usuario.save()
+
+                messages.success(
+                    request, 'Se ha registrado el usuario de manera exitosa.')
+                return redirect('rol_usuario')
 
         messages.success(
-            request, 'Se ha registrado el usuario de manera exitosa.')
-        return redirect('pagina_principal')
+            request, 'Ha ocurrido un error, por favor intente de nuevo')
+        return redirect('rol_usuario')
 
 
-@login_required(login_url='/')
-def create_conductor(request):
-    if request.method == "GET":
-        titulo = "Nuevo Conductor"
-        return render(request, "admin/create_conductor.html", {"titulo": titulo})
-    else:
-        contraseña_hasheada = make_password(
-            request.POST['inputPassword'])
-        nombre_usuario = generar_nombre_usuario(
-            request.POST['inputName'], request.POST['inputLastName'])
-
-        rol = Roles.objects.get(pk=3)
-
-        usuario = Usuarios(
-            nombreusuario=nombre_usuario,
-            contraseñahash=contraseña_hasheada,
-            rolid=rol
-        )
-        usuario.save()
-
-        conductor = Conductores.objects.create(
-            nombre=request.POST['inputName'],
-            apellido=request.POST['inputLastName'],
-            telefono=request.POST['inputPhone'],
-            direccion=request.POST['inputCity'],
-            licenciaconducir=request.POST['inputLicense'],
-            fechacontratacion=request.POST['inputDateContract'],
-            usuarioid=usuario
-        )
-        conductor.save()
-
-        return redirect('signin')
-
-
-@login_required(login_url='/')
+@login_required
 def create_ruta(request):
     if request.method == "GET":
-        titulo = "Nueva Ruta"
-        return render(request, "admin/create_ruta.html", {"titulo": titulo})
+        form = NuevaRutaForm()
+        return render(request, "admin/create_ruta.html", {'form': form, 'usuario': request.user})
     else:
-        try:
-            ruta = Rutas.objects.create(
-                origen=request.POST['inputOrigin'],
-                destino=request.POST['inputDestiny'],
-                distancia=request.POST['inputDistance'],
-                duracionestimada=request.POST['inputDuration'],
-                preciobase=request.POST['inputPrice'],
-            )
-            ruta.save()
+        form = NuevaRutaForm(request.POST)
+
+        if form.is_valid():
+            form.save()
 
             messages.success(
                 request, 'Se ha registrado la ruta de manera exitosa.')
             return redirect('pagina_principal')
 
-        except IntegrityError:
-            messages.error(
-                request, 'Ha ocurrido un error, por favor intente de nuevo.')
-            return redirect('nueva_ruta')
+        messages.error(
+            request, 'Ha ocurrido un error, por favor intente de nuevo.')
+        return redirect('nueva_ruta')
 
 
-@login_required(login_url='/')
+@login_required
 def create_vehiculo(request):
     if request.method == "GET":
-        titulo = "Nuevo Vehiculo"
-        conductores = Conductores.objects.all()
-        return render(request, "admin/create_vehiculo.html", {"titulo": titulo, "conductores": conductores})
+        form = NuevoVehiculoForm()
+        return render(request, "admin/create_vehiculo.html", {"form": form})
     else:
-        try:
-            conductor = Conductores.objects.get(pk=request.POST['inputDriver'])
-
-            vehiculo = Vehiculos.objects.create(
-                marca=request.POST['inputBrand'],
-                modelo=request.POST['inputModel'],
-                capacidad=request.POST['inputCapacity'],
-                anofabricacion=request.POST['inputFabrication'],
-                placa=request.POST['inputPlate'],
-                estado=request.POST['inputState'],
-                conductorid=conductor
-            )
-            vehiculo.save()
+        formVehiculo = NuevoVehiculoForm(request.POST)
+        if formVehiculo.is_valid():
+            formVehiculo.save(commit=False)
+            formVehiculo.save()
 
             messages.success(
                 request, 'Se ha registrado el vehiculo de manera exitosa.')
-            return redirect('pagina_principal')
-
-        except IntegrityError:
-            messages.error(
-                request, 'Ha ocurrido un error, por favor intente de nuevo.')
             return redirect('nuevo_vehiculo')
 
+        messages.error(
+            request, 'Ha ocurrido un error, por favor intente de nuevo.')
+        return redirect('nuevo_vehiculo')
 
-@login_required(login_url='/')
+
+@login_required
 def create_viaje(request):
     if request.method == "GET":
-        vehiculos = Vehiculos.objects.all()
-        rutas = Rutas.objects.all()
-        titulo = "Nuevo Viaje"
-        return render(request, "admin/create_viaje.html", {"titulo": titulo, "vehiculos": vehiculos, "rutas": rutas})
+        form = NuevoViajesForm()
+        return render(request, "admin/create_viaje.html", {"form": form})
     else:
-        try:
-            ruta = Rutas.objects.get(pk=request.POST['inputRoutes'])
-            vehiculo = Vehiculos.objects.get(
-                pk=request.POST['inputVehiculesRoutes'])
-
-            viaje = Viajes.objects.create(
-                rutaid=ruta,
-                vehiculoid=vehiculo,
-                fechahorasalida=request.POST['inputDateDeparture'],
-                fechahorallegadaestimada=request.POST['inputDateArrive'],
-                cuposdisponibles=request.POST['inputQuotas'],
-            )
-            viaje.save()
+        formViaje = NuevoViajesForm(request.POST)
+        if formViaje.is_valid():
+            formViaje.save(commit=False)
+            formViaje.save()
 
             messages.success(
                 request, 'Se ha registrado el viaje de manera exitosa.')
-            return redirect('pagina_principal')
-
-        except IntegrityError:
-            messages.error(
-                request, 'Ha ocurrido un error, por favor intente de nuevo.')
             return redirect('nuevo_viaje')
+
+        messages.error(
+            request, 'Ha ocurrido un error, por favor intente de nuevo.')
+        return redirect('nuevo_viaje')
+
+
+@login_required
+def see_rutas(request):
+    if request.method == "GET":
+        return render(request, "admin/view_rutas.html")
+    else:
+        formViaje = NuevoViajesForm(request.POST)
+        if formViaje.is_valid():
+            formViaje.save(commit=False)
+            formViaje.save()
+
+            messages.success(
+                request, 'Se ha registrado el viaje de manera exitosa.')
+            return redirect('nuevo_viaje')
+
+        messages.error(
+            request, 'Ha ocurrido un error, por favor intente de nuevo.')
+        return redirect('nuevo_viaje')
+
+
+@login_required
+def see_rutas(request):
+    if request.method == "GET":
+        rutas = Rutas.objects.all()
+        return render(request, "admin/view_rutas.html", {'rutas': rutas, 'usuario': request.user})
+
+
+@login_required
+def see_viajes(request):
+    if request.method == "GET":
+        viajes = Viajes.objects.all()
+        return render(request, "admin/view_viajes.html", {'viajes': viajes, 'usuario': request.user})
+
+
+@login_required
+def see_vehiculos(request):
+    if request.method == "GET":
+        vehiculos = Vehiculos.objects.all()
+        return render(request, "admin/view_vehiculos.html", {'vehiculos': vehiculos, 'usuario': request.user})
+
+
+@login_required
+def see_tickets(request):
+    if request.method == "GET":
+        tickets = Tickets.objects.all()
+        return render(request, "admin/view_tickets.html", {"ticket": tickets, 'usuario': request.user})
+
+
+@login_required
+def see_usuarios(request):
+    if request.method == "GET":
+        usuarios = Usuarios.objects.all()
+        return render(request, "admin/view_usuarios.html", {'usuarios': usuarios, 'usuario': request.user})
+
+
+@login_required
+def see_conductores(request):
+    if request.method == "GET":
+        conductores = Conductores.objects.all()
+        return render(request, "admin/view_conductores.html", {'conductores': conductores, 'usuario': request.user})

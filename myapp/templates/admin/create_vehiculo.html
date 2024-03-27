@@ -1,68 +1,60 @@
-{% extends 'capas/baseadmin.html' %}
+{% extends 'capas/base.html' %}
 
 {% block title %}
-{{ titulo }}
+  Nuevo Vehiculo
 {% endblock %}
 
 {% block content %}
 {{ block.super }}
-<div class="container-sm col-md-8 my-5 bg-info-subtle rounded">
-  <h1 class="text-black">Registro de viajes</h1>
-  <form class="row g-3">
-    {% csrf_token %}
-    <div class="col-md-6">
-      <label for="inputBrand" class="form-label">Marca del vehiculo</label>
-      <input type="text" class="form-control bg-trasnparent" id="inputBrand" name="inputBrand" placeholder="Marca">
-    </div>
-    <div class="col-md-6">
-      <label for="inputModel" class="form-label">Modelo del vehiculo</label>
-      <input type="text" class="form-control" id="inputModel" name="inputModel" placeholder="Modelo">
-    </div>
-    <div class="col-md-3">
-      <label for="inputFabrication" class="form-label">Año fabricación</label>
-      <input type="text" class="form-control" id="inputFabrication" name="inputFabrication" placeholder="Año">
-    </div>
-    <div class="col-md-3">
-      <label for="inputCapacity" class="form-label">Capacidad</label>
-      <input type="number" class="form-control" id="inputCapacity" name="inputCapacity" placeholder="Capacidad">
-    </div>
-    <div class="col-md-3">
-      <label for="inputPlate" class="form-label">Placa</label>
-      <input type="text" class="form-control" id="inputPlate" name="inputPlate" placeholder="Placa">
-    </div>
-    <div class="col-md-3">
-      <label for="inputState" class="form-label">Estado</label>
-      <select id="inputState" class="form-select">
-        <option selected>Disponible</option>
-        <option selected>Fuera de servicio</option>
-      </select>
-    </div>
-    <div class="col-md-6">
-      <label for="inputDriver" class="form-label">Conductores</label>
-      <select id="inputDriver" name="inputDriver" class="form-select">
-        {% for conductor in conductores %}
-        <option value="{{conductor.conductorid}}">{{conductor.conductorid}} - {{conductor.nombre}}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div class="col-12 my-4">
-      <button type="submit" class="btn btn-primary">Registrar</button>
-    </div>
-  </form>
-</div>
+  <div class="container-sm col-md-8 my-5 bg-info-subtle rounded">
+    <h1 class="text-black">Registro de viajes</h1>
+    <form class="row g-3" method="POST">
+      {% csrf_token %}
+      <div class="col-md-6">
+        <label for="marca" class="form-label">Marca del vehiculo</label>
+        {{ form.marca }}
+      </div>
+      <div class="col-md-6">
+        <label for="modelo" class="form-label">Modelo del vehiculo</label>
+        {{ form.modelo }}
+      </div>
+      <div class="col-md-3">
+        <label for="añoFabricacion" class="form-label">Año fabricación</label>
+        {{ form.anofabricacion }}
+      </div>
+      <div class="col-md-3">
+        <label for="capacidad" class="form-label">Capacidad</label>
+        {{ form.capacidad }}
+      </div>
+      <div class="col-md-3">
+        <label for="placa" class="form-label">Placa</label>
+        {{ form.placa }}
+      </div>
+      <div class="col-md-3">
+        <label for="estado" class="form-label">Estado</label>
+        {{ form.estado }}
+      </div>
+      <div class="col-md-6">
+        <label for="conductores" class="form-label">Conductores</label>
+        {{ form.conductorid }}
+      </div>
+      <div class="col-12 my-4">
+        <button type="submit" class="btn btn-primary">Registrar</button>
+      </div>
+    </form>
+  </div>
 
-{% if messages %}
-{% for message in messages %}
-{% if message.type == "error" %}
-<script>
-  Swal.fire("Error", "{{ message }}", "error");
-</script>
-{% elif message.type == "success" %}
-<script>
-  Swal.fire("Success", "{{ message }}", "success")
-</script>
-{% endif %}
-{% endfor %}
-{% endif %}
-
+  {% if messages %}
+    {% for message in messages %}
+      {% if message.tags == 'error' %}
+        <script>
+          Swal.fire('Error', '{{ message }}', 'error')
+        </script>
+      {% elif message.tags == 'success' %}
+        <script>
+          Swal.fire('Success', '{{ message }}', 'success')
+        </script>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
 {% endblock %}

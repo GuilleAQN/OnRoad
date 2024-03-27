@@ -1,34 +1,38 @@
 {% extends 'capas/baseadmin.html' %}
 
 {% block title %}
-{{ titulo }}
+  Usuarios
 {% endblock %}
 
 {% block content %}
-{{ block.super }}
-<div class="container my-5 rounded ">
-  <div id="accordion">
-    {% for usuario in usuarios %}
-    <div class="card my-4  text-black">
-      <div class="card-header bg-white text-black d-flex justify-content-between align-items-center">
-        <a class="btn text-black" data-bs-toggle="collapse" href="#collapseOne">Usuario {{ usuario.usuarioid }}</a>
-        <div class="align-items-right">
-          <a class="btn text-bg-red text-white" href="eliminar_usuario/" alt="Eliminar" title="Eliminar"><i
-              class="fa-solid fa-trash" style="color: #cf2507;"></i></a>
-          <a class="btn text-bg-green text-white" href="editar_usuario/" alt=" Editar" title="Editar"><i class=" fa-solid
-              fa-pen-to-square" style="color: #296ce0;"></i></a>
+  {{ block.super }}
+  <div class="container my-5 rounded">
+    <div id="accordion">
+      {% for usuario in usuarios %}
+        <div class="card my-4 text-black">
+          <div class="card-header bg-white text-black d-flex justify-content-between align-items-center">
+            <a class="btn text-black" data-bs-toggle="collapse" href="#collapse{{ forloop.counter }}">Usuario {{ usuario.usuarioid }}</a>
+            <div class="align-items-right">
+              <a class="btn text-bg-red text-white" href="eliminar_usuario/" alt="Eliminar" title="Eliminar"><i class="fa-solid fa-trash" style="color: #cf2507;"></i></a>
+              <a class="btn text-bg-green text-white" href="editar_usuario/" alt=" Editar" title="Editar"><i class="fa-solid fa-pen-to-square" style="color: #296ce0;"></i></a>
+            </div>
+          </div>
+          <div id="collapse{{ forloop.counter }}" class="collapse bg-info-subtle text-white" data-bs-parent="#accordion">
+            <div class="card-body text-black">
+              <strong>Usuario</strong>: {{ usuario.nombreusuario }}
+            </div>
+            <div class="card-body text-black">
+              <strong>Estado</strong>: {{ usuario.estado }}
+            </div>
+            <div class="card-body text-black">
+              <strong>Rol</strong>: {{ usuario.rolid.nombrerol }}
+            </div>
+            <div class="card-body text-black">
+              <strong>Fecha creación</strong>: {{ usuario.fechacreacion }}
+            </div>
+          </div>
         </div>
-      </div>
-      <div id="collapseOne" class="collapse show bg-info-subtle text-white" data-bs-parent="#accordion">
-        <div class="card-body text-black">Nombre usuario: {{ usuario.nombreusuario }}</div>
-        <div class="card-body text-black">Estado: {{ usuario.contraseña }}</div>
-        <div class="card-body text-black">Rol: {{ usuario.rolid.nombrerol }}</div>
-        <div class="card-body text-black">Fecha creación: {{ usuario.fechacreacion }}</div>
-      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
   </div>
-</div>
-
-
 {% endblock %}
