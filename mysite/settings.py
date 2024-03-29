@@ -97,8 +97,8 @@ if DATABASE_PROD_URL:
     DATABASES.update(production={
         'ENGINE': 'django.db.backends.postgresql', **dj_database_url.parse(DATABASE_PROD_URL)})
 
-ENVIRONMENT = os.getenv('DJANGO_ENV', 'development')
-DATABASE_CONFIG = DATABASES.get(ENVIRONMENT, DATABASES['development'])
+ENVIRONMENT = os.getenv('DJANGO_ENV', 'production')
+DATABASE_CONFIG = DATABASES.get(ENVIRONMENT, DATABASES['production'])
 
 DATABASES['default'] = DATABASE_CONFIG
 
