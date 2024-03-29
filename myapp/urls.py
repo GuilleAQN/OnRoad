@@ -4,8 +4,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.signin, name="login"),
-
+    path('perfil/', views.see_perfil, name="perfil"),
     path("elegir_usuario/", views.elegir_usuario, name="rol_usuario"),
     path("elegir_usuario/registro_usuario/", views.create_usuario, name="registro_usuario"),
     path("create_ruta/", views.create_ruta, name="registro_ruta"),
@@ -18,6 +17,8 @@ urlpatterns = [
     path("ver_tickets/", views.see_tickets, name="ver_tickets"),
     path("ver_usuarios/", views.see_usuarios, name="ver_usuarios"),
     path("ver_conductores/", views.see_conductores, name="ver_conductores"),
+    path("mis_tickets/", views.see_my_tickets, name="mis_tickets"),
+
 
     path("eliminar_ruta/<int:id>", views.delete_ruta, name="eliminar_ruta"),
     path("eliminar_viaje/<int:id>", views.delete_viaje, name="eliminar_viaje"),

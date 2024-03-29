@@ -22,9 +22,9 @@
           <div class="nombre">OnRoad</div>
         </a>
         {% if request.path == '/' %}
-          <a class="btn btn-success custim-btn" href="/registro/">Registrarse</a>
+          <a class="btn btn-success custim-btn" href="{% url 'signup' %}">Registrarse</a>
         {% elif request.path == '/registro/' %}
-          <a class="btn btn-success custim-btn" href="/">Volver al Inicio de Sesión</a>
+          <a class="btn btn-success custim-btn" href="{% url '' %}">Volver al Inicio de Sesión</a>
         {% endif %}
       </div>
     </nav>

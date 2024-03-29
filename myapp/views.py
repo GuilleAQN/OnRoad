@@ -84,6 +84,12 @@ def signout(request):
 
 
 @login_required
+def see_perfil(request):
+    rol = "capas/baseadmin.html" if request.user.rolid.rolid == 1 else "capas/base.html"
+    return render(request, "perfil.html", {"rol": rol, "usuario": request.user})
+
+
+@login_required
 def elegir_usuario(request):
     roles = Roles.objects.all()
     return render(request, "admin/elegir_usuario.html", {"roles": roles, "usuario": request.user})
@@ -230,7 +236,7 @@ def create_viaje(request):
 
 
 @login_required
-def see_rutas(request):
+def create_ruta(request):
     if request.method == "GET":
         return render(request, "admin/view_rutas.html")
     else:
@@ -250,44 +256,45 @@ def see_rutas(request):
 
 @login_required
 def see_rutas(request):
-    if request.method == "GET":
-        rutas = Rutas.objects.all()
-        return render(request, "admin/view_rutas.html", {'rutas': rutas, 'usuario': request.user})
+    rutas = Rutas.objects.all()
+    return render(request, "admin/view_rutas.html", {'rutas': rutas, 'usuario': request.user})
 
 
 @login_required
 def see_viajes(request):
-    if request.method == "GET":
-        viajes = Viajes.objects.all()
-        return render(request, "admin/view_viajes.html", {'viajes': viajes, 'usuario': request.user})
+    viajes = Viajes.objects.all()
+    return render(request, "admin/view_viajes.html", {'viajes': viajes, 'usuario': request.user})
 
 
 @login_required
 def see_vehiculos(request):
-    if request.method == "GET":
-        vehiculos = Vehiculos.objects.all()
-        return render(request, "admin/view_vehiculos.html", {'vehiculos': vehiculos, 'usuario': request.user})
+    vehiculos = Vehiculos.objects.all()
+    return render(request, "admin/view_vehiculos.html", {'vehiculos': vehiculos, 'usuario': request.user})
 
 
 @login_required
 def see_tickets(request):
-    if request.method == "GET":
-        tickets = Tickets.objects.all()
-        return render(request, "admin/view_tickets.html", {"ticket": tickets, 'usuario': request.user})
+    tickets = Tickets.objects.all()
+    return render(request, "admin/view_tickets.html", {"ticket": tickets, 'usuario': request.user})
+
+
+@login_required
+def see_my_tickets(request):
+    cliente = Clientes.objects.get(usuarioid=request.user.usuarioid)
+    tickets = Tickets.objects.filter(clienteid=cliente.clienteid)
+    return render(request, "my_tickets.html", {"ticket": tickets, 'usuario': request.user})
 
 
 @login_required
 def see_usuarios(request):
-    if request.method == "GET":
-        usuarios = Usuarios.objects.all()
-        return render(request, "admin/view_usuarios.html", {'usuarios': usuarios, 'usuario': request.user})
+    usuarios = Usuarios.objects.all()
+    return render(request, "admin/view_usuarios.html", {'usuarios': usuarios, 'usuario': request.user})
 
 
 @login_required
 def see_conductores(request):
-    if request.method == "GET":
-        conductores = Conductores.objects.all()
-        return render(request, "admin/view_conductores.html", {'conductores': conductores, 'usuario': request.user})
+    conductores = Conductores.objects.all()
+    return render(request, "admin/view_conductores.html", {'conductores': conductores, 'usuario': request.user})
 
 
 @login_required
