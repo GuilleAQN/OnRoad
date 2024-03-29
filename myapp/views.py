@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .backends import CustomAuthBackend
 from django.contrib import messages
 from django.http import JsonResponse
-from .models import Usuarios, Conductores, Vehiculos, Rutas, Viajes, Roles, Tickets, generar_nombre_usuario
+from .models import Usuarios, Clientes, Conductores, Vehiculos, Rutas, Viajes, Roles, Tickets, generar_nombre_usuario
 from .forms import SignInForm, SignUpForm, NuevoUsuarioForm, NuevoAdminForm, NuevoClienteForm, NuevoConductorForm,  NuevoViajesForm, NuevoVehiculoForm, NuevaRutaForm
 
 
@@ -14,7 +14,6 @@ def signin(request):
         return render(request, "signin.html", {"form": form})
     else:
         form = SignInForm(request.POST)
-        print(form.errors)
         if form.is_valid():
             usuario = form.cleaned_data['usuario']
             contraseña = form.cleaned_data['contraseña']
@@ -23,6 +22,8 @@ def signin(request):
             if usuario is not None:
                 login(request, usuario)
                 return redirect('pagina_principal')
+        messages.error(
+            request, 'Las credenciales no son correctas, por favor intente de nuevo.')
         return render(request, "signin.html", {"form": form})
 
 
@@ -40,10 +41,9 @@ def signup(request):
             apellido = formCliente.cleaned_data['apellido']
 
             nombre_usuario = generar_nombre_usuario(nombre, apellido)
-            print(nombre_usuario)
 
             usuario = formUsuario.save(commit=False, rol=2)
-            cliente = formCliente.save(commit=False)
+            cliente = formCliente.save(commit=False, usuario=usuario)
 
             usuario.nombreusuario = nombre_usuario
             usuario.save()
@@ -70,7 +70,6 @@ def signup(request):
 @login_required
 def pagina_principal(request):
     rol = "capas/baseadmin.html" if request.user.rolid.rolid == 1 else "capas/base.html"
-    print(rol)
 
     return render(request, "index.html", {
         'rol': rol,
@@ -129,16 +128,14 @@ def create_usuario(request):
             if formUsuario.is_valid() and formCliente.is_valid():
                 nombre = formCliente.cleaned_data['nombre']
                 apellido = formCliente.cleaned_data['apellido']
-                print(nombre)
 
-                nombre_usuario = generar_nombre_usuario(nombre=nombre, apellido=apellido)
-                print(nombre_usuario)
+                nombre_usuario = generar_nombre_usuario(
+                    nombre=nombre, apellido=apellido)
 
                 cliente = formCliente.save(commit=False)
                 usuario = formUsuario.save(commit=False, rol=2)
 
                 usuario.nombreusuario = nombre_usuario
-                print(usuario.nombreusuario)
                 cliente.save()
                 usuario.save()
 
@@ -156,12 +153,12 @@ def create_usuario(request):
 
                 nombre_usuario = generar_nombre_usuario(nombre, apellido)
 
-                conductor = formConductor.save(commit=False)
                 usuario = formUsuario.save(commit=False, rol=3)
+                conductor = formConductor.save(commit=False, usuario=usuario)
 
                 usuario.nombreusuario = nombre_usuario
-                conductor.save()
                 usuario.save()
+                conductor.save()
 
                 messages.success(
                     request, 'Se ha registrado el usuario de manera exitosa.')
@@ -182,9 +179,9 @@ def create_ruta(request):
 
         if form.is_valid():
             form.save()
-
             messages.success(
                 request, 'Se ha registrado la ruta de manera exitosa.')
+
             return redirect('pagina_principal')
 
         messages.error(
@@ -205,11 +202,11 @@ def create_vehiculo(request):
 
             messages.success(
                 request, 'Se ha registrado el vehiculo de manera exitosa.')
-            return redirect('nuevo_vehiculo')
+            return redirect('registro_vehiculo')
 
         messages.error(
             request, 'Ha ocurrido un error, por favor intente de nuevo.')
-        return redirect('nuevo_vehiculo')
+        return redirect('registro_vehiculo')
 
 
 @login_required
@@ -225,11 +222,11 @@ def create_viaje(request):
 
             messages.success(
                 request, 'Se ha registrado el viaje de manera exitosa.')
-            return redirect('nuevo_viaje')
+            return redirect('registro_viaje')
 
         messages.error(
             request, 'Ha ocurrido un error, por favor intente de nuevo.')
-        return redirect('nuevo_viaje')
+        return redirect('registro_viaje')
 
 
 @login_required
@@ -244,11 +241,11 @@ def see_rutas(request):
 
             messages.success(
                 request, 'Se ha registrado el viaje de manera exitosa.')
-            return redirect('nuevo_viaje')
+            return redirect('registro_viaje')
 
         messages.error(
             request, 'Ha ocurrido un error, por favor intente de nuevo.')
-        return redirect('nuevo_viaje')
+        return redirect('registro_viaje')
 
 
 @login_required
@@ -291,3 +288,56 @@ def see_conductores(request):
     if request.method == "GET":
         conductores = Conductores.objects.all()
         return render(request, "admin/view_conductores.html", {'conductores': conductores, 'usuario': request.user})
+
+
+@login_required
+def delete_ruta(request, id):
+    ruta = get_object_or_404(Rutas, rutaid=id)
+    ruta.delete()
+    messages.success(request, 'Se ha eliminado el viaje de manera exitosa.')
+    return redirect('ver_rutas')
+
+
+@login_required
+def delete_viaje(request, id):
+    viaje = get_object_or_404(Viajes, rutaid=id)
+    viaje.delete()
+    messages.success(request, 'Se ha eliminado el viaje de manera exitosa.')
+    return redirect('ver_viajes')
+
+
+@login_required
+def delete_vehiculo(request, id):
+    vehiculo = get_object_or_404(Vehiculos, vehiculoid=id)
+    vehiculo.delete()
+    messages.success(request, 'Se ha eliminado el viaje de manera exitosa.')
+    return redirect('ver_vehiculos')
+
+
+@login_required
+def delete_usuario(request, id):
+    usuario = get_object_or_404(Usuarios, usuarioid=id)
+    tipo_usuario = usuario.rolid
+
+    print(tipo_usuario.rolid)
+
+    if tipo_usuario.rolid == 3:
+        conductor = get_object_or_404(
+            Conductores, conductorid=tipo_usuario.rolid)
+        conductor.delete()
+    elif tipo_usuario.rolid == 2:
+        cliente = get_object_or_404(Clientes, clienteid=tipo_usuario.rolid)
+        cliente.delete()
+
+    usuario.delete()
+    messages.success(request, 'Se ha eliminado el viaje de manera exitosa.')
+    return redirect('ver_usuarios')
+
+
+@login_required
+def delete_conductor(request, id):
+    conductor = get_object_or_404(Conductores, id=id)
+    conductor.delete()
+
+    messages.success(request, 'Se ha eliminado el viaje de manera exitosa.')
+    return redirect('ver_conductores')

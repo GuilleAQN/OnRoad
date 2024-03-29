@@ -97,10 +97,11 @@ if DATABASE_PROD_URL:
     DATABASES.update(production={
         'ENGINE': 'django.db.backends.postgresql', **dj_database_url.parse(DATABASE_PROD_URL)})
 
-ENVIRONMENT = os.getenv('DJANGO_ENV', 'production')
-DATABASE_CONFIG = DATABASES.get(ENVIRONMENT, DATABASES['production'])
+ENVIRONMENT = os.getenv('DJANGO_ENV', 'development')
+DATABASE_CONFIG = DATABASES.get(ENVIRONMENT, DATABASES['development'])
 
 DATABASES['default'] = DATABASE_CONFIG
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -123,7 +124,7 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = 'myapp.Usuarios'
 
 # Internationalization
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-mx'
 
 TIME_ZONE = 'UTC'
 
