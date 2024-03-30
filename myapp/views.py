@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .backends import CustomAuthBackend
 from django.contrib import messages
 from django.http import JsonResponse
-from .models import Usuarios, Conductores, Vehiculos, Rutas, Viajes, Roles, Tickets, generar_nombre_usuario
+from .models import Usuarios, Clientes, Conductores, Vehiculos, Rutas, Viajes, Roles, Tickets, generar_nombre_usuario
 from .forms import SignInForm, SignUpForm, NuevoUsuarioForm, NuevoAdminForm, NuevoClienteForm, NuevoConductorForm,  NuevoViajesForm, NuevoVehiculoForm, NuevaRutaForm
 
 
@@ -22,6 +22,8 @@ def signin(request):
             if usuario is not None:
                 login(request, usuario)
                 return redirect('pagina_principal')
+        messages.error(
+            request, 'Las credenciales no son correctas, por favor intente de nuevo.')
         return render(request, "signin.html", {"form": form})
 
 
@@ -41,10 +43,9 @@ def signup(request):
             print(apellido)
 
             nombre_usuario = generar_nombre_usuario(nombre, apellido)
-            print(nombre_usuario)
 
             usuario = formUsuario.save(commit=False, rol=2)
-            cliente = formCliente.save(commit=False)
+            cliente = formCliente.save(commit=False, usuario=usuario)
 
             usuario.nombreusuario = nombre_usuario
             usuario.save()
@@ -82,6 +83,12 @@ def pagina_principal(request):
 def signout(request):
     logout(request)
     return redirect('signin')
+
+
+@login_required
+def see_perfil(request):
+    rol = "capas/baseadmin.html" if request.user.rolid.rolid == 1 else "capas/base.html"
+    return render(request, "perfil.html", {"rol": rol, "usuario": request.user})
 
 
 @login_required
@@ -130,7 +137,8 @@ def create_usuario(request):
                 nombre = formCliente.cleaned_data['nombre']
                 apellido = formCliente.cleaned_data['apellido']
 
-                nombre_usuario = generar_nombre_usuario(nombre=nombre, apellido=apellido)
+                nombre_usuario = generar_nombre_usuario(
+                    nombre=nombre, apellido=apellido)
 
                 cliente = formCliente.save(commit=False)
                 usuario = formUsuario.save(commit=False, rol=2)
@@ -153,12 +161,12 @@ def create_usuario(request):
 
                 nombre_usuario = generar_nombre_usuario(nombre, apellido)
 
-                conductor = formConductor.save(commit=False)
                 usuario = formUsuario.save(commit=False, rol=3)
+                conductor = formConductor.save(commit=False, usuario=usuario)
 
                 usuario.nombreusuario = nombre_usuario
-                conductor.save()
                 usuario.save()
+                conductor.save()
 
                 messages.success(
                     request, 'Se ha registrado el usuario de manera exitosa.')
@@ -179,9 +187,9 @@ def create_ruta(request):
 
         if form.is_valid():
             form.save()
-
             messages.success(
                 request, 'Se ha registrado la ruta de manera exitosa.')
+
             return redirect('pagina_principal')
 
         messages.error(
@@ -202,11 +210,11 @@ def create_vehiculo(request):
 
             messages.success(
                 request, 'Se ha registrado el vehiculo de manera exitosa.')
-            return redirect('nuevo_vehiculo')
+            return redirect('registro_vehiculo')
 
         messages.error(
             request, 'Ha ocurrido un error, por favor intente de nuevo.')
-        return redirect('nuevo_vehiculo')
+        return redirect('registro_vehiculo')
 
 
 @login_required
@@ -222,15 +230,15 @@ def create_viaje(request):
 
             messages.success(
                 request, 'Se ha registrado el viaje de manera exitosa.')
-            return redirect('nuevo_viaje')
+            return redirect('registro_viaje')
 
         messages.error(
             request, 'Ha ocurrido un error, por favor intente de nuevo.')
-        return redirect('nuevo_viaje')
+        return redirect('registro_viaje')
 
 
 @login_required
-def see_rutas(request):
+def create_ruta(request):
     if request.method == "GET":
         return render(request, "admin/view_rutas.html")
     else:
@@ -241,50 +249,104 @@ def see_rutas(request):
 
             messages.success(
                 request, 'Se ha registrado el viaje de manera exitosa.')
-            return redirect('nuevo_viaje')
+            return redirect('registro_viaje')
 
         messages.error(
             request, 'Ha ocurrido un error, por favor intente de nuevo.')
-        return redirect('nuevo_viaje')
+        return redirect('registro_viaje')
 
 
 @login_required
 def see_rutas(request):
-    if request.method == "GET":
-        rutas = Rutas.objects.all()
-        return render(request, "admin/view_rutas.html", {'rutas': rutas, 'usuario': request.user})
+    rutas = Rutas.objects.all()
+    return render(request, "admin/view_rutas.html", {'rutas': rutas, 'usuario': request.user})
 
 
 @login_required
 def see_viajes(request):
-    if request.method == "GET":
-        viajes = Viajes.objects.all()
-        return render(request, "admin/view_viajes.html", {'viajes': viajes, 'usuario': request.user})
+    viajes = Viajes.objects.all()
+    return render(request, "admin/view_viajes.html", {'viajes': viajes, 'usuario': request.user})
 
 
 @login_required
 def see_vehiculos(request):
-    if request.method == "GET":
-        vehiculos = Vehiculos.objects.all()
-        return render(request, "admin/view_vehiculos.html", {'vehiculos': vehiculos, 'usuario': request.user})
+    vehiculos = Vehiculos.objects.all()
+    return render(request, "admin/view_vehiculos.html", {'vehiculos': vehiculos, 'usuario': request.user})
 
 
 @login_required
 def see_tickets(request):
-    if request.method == "GET":
-        tickets = Tickets.objects.all()
-        return render(request, "admin/view_tickets.html", {"ticket": tickets, 'usuario': request.user})
+    tickets = Tickets.objects.all()
+    return render(request, "admin/view_tickets.html", {"ticket": tickets, 'usuario': request.user})
+
+
+@login_required
+def see_my_tickets(request):
+    cliente = Clientes.objects.get(usuarioid=request.user.usuarioid)
+    tickets = Tickets.objects.filter(clienteid=cliente.clienteid)
+    return render(request, "my_tickets.html", {"ticket": tickets, 'usuario': request.user})
 
 
 @login_required
 def see_usuarios(request):
-    if request.method == "GET":
-        usuarios = Usuarios.objects.all()
-        return render(request, "admin/view_usuarios.html", {'usuarios': usuarios, 'usuario': request.user})
+    usuarios = Usuarios.objects.all()
+    return render(request, "admin/view_usuarios.html", {'usuarios': usuarios, 'usuario': request.user})
 
 
 @login_required
 def see_conductores(request):
-    if request.method == "GET":
-        conductores = Conductores.objects.all()
-        return render(request, "admin/view_conductores.html", {'conductores': conductores, 'usuario': request.user})
+    conductores = Conductores.objects.all()
+    return render(request, "admin/view_conductores.html", {'conductores': conductores, 'usuario': request.user})
+
+
+@login_required
+def delete_ruta(request, id):
+    ruta = get_object_or_404(Rutas, rutaid=id)
+    ruta.delete()
+    messages.success(request, 'Se ha eliminado el viaje de manera exitosa.')
+    return redirect('ver_rutas')
+
+
+@login_required
+def delete_viaje(request, id):
+    viaje = get_object_or_404(Viajes, rutaid=id)
+    viaje.delete()
+    messages.success(request, 'Se ha eliminado el viaje de manera exitosa.')
+    return redirect('ver_viajes')
+
+
+@login_required
+def delete_vehiculo(request, id):
+    vehiculo = get_object_or_404(Vehiculos, vehiculoid=id)
+    vehiculo.delete()
+    messages.success(request, 'Se ha eliminado el viaje de manera exitosa.')
+    return redirect('ver_vehiculos')
+
+
+@login_required
+def delete_usuario(request, id):
+    usuario = get_object_or_404(Usuarios, usuarioid=id)
+    tipo_usuario = usuario.rolid
+
+    print(tipo_usuario.rolid)
+
+    if tipo_usuario.rolid == 3:
+        conductor = get_object_or_404(
+            Conductores, conductorid=tipo_usuario.rolid)
+        conductor.delete()
+    elif tipo_usuario.rolid == 2:
+        cliente = get_object_or_404(Clientes, clienteid=tipo_usuario.rolid)
+        cliente.delete()
+
+    usuario.delete()
+    messages.success(request, 'Se ha eliminado el viaje de manera exitosa.')
+    return redirect('ver_usuarios')
+
+
+@login_required
+def delete_conductor(request, id):
+    conductor = get_object_or_404(Conductores, id=id)
+    conductor.delete()
+
+    messages.success(request, 'Se ha eliminado el viaje de manera exitosa.')
+    return redirect('ver_conductores')

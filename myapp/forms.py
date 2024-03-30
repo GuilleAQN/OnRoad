@@ -66,9 +66,9 @@ class NuevoAdminForm(forms.ModelForm):
             'password': forms.PasswordInput(attrs={'id': 'contraseña', 'class': 'form-control', 'placeholder': 'Introduzca su contraseña'}),
         }
 
-    def save(self, commit=True, rol=1):
+    def save(self, commit=True):
         admin = super().save(commit=False)
-        admin.rolid = Roles.objects.get(rolid=rol)
+        admin.rolid = Roles.objects.get(rolid=1)
         admin.password = make_password(self.clean()['password'])
         if commit:
             admin.save()
@@ -88,14 +88,11 @@ class NuevoClienteForm(forms.ModelForm):
             'direccion': forms.TextInput(attrs={'id': 'direccion', 'class': 'form-control', 'placeholder': 'Introduzca su dirección'}),
         }
 
-    def save(self, commit=True):
+    def save(self, commit=True, usuario=None):
         cliente = super().save(commit=False)
-        usuario = NuevoUsuarioForm(self.data)
-        if usuario.is_valid():
-            usuario_instance = usuario.save()
-            cliente.usuarioid = usuario_instance
-            if commit:
-                cliente.save()
+        cliente.usuarioid = usuario
+        if commit:
+            cliente.save()
         return cliente
 
 
@@ -138,14 +135,11 @@ class NuevoConductorForm(forms.ModelForm):
             }),
         }
 
-    def save(self, commit=True):
+    def save(self, commit=True, usuario=None):
         conductor = super().save(commit=False)
-        usuario = NuevoUsuarioForm(self.data)
-        if usuario.is_valid():
-            usuario_instance = usuario.save()
-            conductor.usuarioid = usuario_instance
-            if commit:
-                conductor.save()
+        conductor.usuarioid = usuario
+        if commit:
+            conductor.save()
         return conductor
 
 

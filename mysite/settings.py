@@ -102,6 +102,7 @@ DATABASE_CONFIG = DATABASES.get(ENVIRONMENT, DATABASES['production'])
 
 DATABASES['default'] = DATABASE_CONFIG
 
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -123,7 +124,7 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = 'myapp.Usuarios'
 
 # Internationalization
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-mx'
 
 TIME_ZONE = 'UTC'
 
