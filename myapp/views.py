@@ -333,14 +333,14 @@ def delete_usuario(request, id):
     usuario = get_object_or_404(Usuarios, usuarioid=id)
     tipo_usuario = usuario.rolid
 
-    print(tipo_usuario.rolid)
-
     if tipo_usuario.rolid == 3:
         conductor = get_object_or_404(
             Conductores, conductorid=tipo_usuario.rolid)
         conductor.delete()
     elif tipo_usuario.rolid == 2:
         cliente = get_object_or_404(Clientes, clienteid=tipo_usuario.rolid)
+        tickets_clientes = Tickets.objects.filter(clienteid=cliente.clienteid)
+        tickets_clientes.delete()
         cliente.delete()
 
     usuario.delete()
