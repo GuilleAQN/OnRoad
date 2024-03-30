@@ -11,7 +11,11 @@ from .forms import SignInForm, SignUpForm, NuevoUsuarioForm, NuevoAdminForm, Nue
 def signin(request):
     if request.method == "GET":
         form = SignInForm()
-        return render(request, "signin.html", {"form": form})
+        if 'is_a_logout' in request.GET:
+            is_a_logout = False
+        else:
+            is_a_logout = True
+        return render(request, "signin.html", {"form": form, 'is_a_logout': is_a_logout})
     else:
         form = SignInForm(request.POST)
         if form.is_valid():
@@ -82,7 +86,7 @@ def pagina_principal(request):
 @login_required
 def signout(request):
     logout(request)
-    return redirect('signin')
+    return redirect('signin', is_a_logout=False)
 
 
 @login_required
@@ -201,7 +205,7 @@ def create_ruta(request):
 def create_vehiculo(request):
     if request.method == "GET":
         form = NuevoVehiculoForm()
-        return render(request, "admin/create_vehiculo.html", {"form": form})
+        return render(request, "admin/create_vehiculo.html", {"form": form, 'usuario': request.user})
     else:
         formVehiculo = NuevoVehiculoForm(request.POST)
         if formVehiculo.is_valid():
@@ -221,7 +225,7 @@ def create_vehiculo(request):
 def create_viaje(request):
     if request.method == "GET":
         form = NuevoViajesForm()
-        return render(request, "admin/create_viaje.html", {"form": form})
+        return render(request, "admin/create_viaje.html", {"form": form, 'usuario': request.user})
     else:
         formViaje = NuevoViajesForm(request.POST)
         if formViaje.is_valid():
@@ -240,12 +244,13 @@ def create_viaje(request):
 @login_required
 def create_ruta(request):
     if request.method == "GET":
-        return render(request, "admin/view_rutas.html")
+        form = NuevaRutaForm()
+        return render(request, "admin/create_ruta.html", {"form": form, 'usuario': request.user})
     else:
-        formViaje = NuevoViajesForm(request.POST)
-        if formViaje.is_valid():
-            formViaje.save(commit=False)
-            formViaje.save()
+        formRuta = NuevaRutaForm(request.POST)
+        if formRuta.is_valid():
+            formRuta.save(commit=False)
+            formRuta.save()
 
             messages.success(
                 request, 'Se ha registrado el viaje de manera exitosa.')
@@ -328,14 +333,14 @@ def delete_usuario(request, id):
     usuario = get_object_or_404(Usuarios, usuarioid=id)
     tipo_usuario = usuario.rolid
 
-    print(tipo_usuario.rolid)
-
     if tipo_usuario.rolid == 3:
         conductor = get_object_or_404(
             Conductores, conductorid=tipo_usuario.rolid)
         conductor.delete()
     elif tipo_usuario.rolid == 2:
         cliente = get_object_or_404(Clientes, clienteid=tipo_usuario.rolid)
+        tickets_clientes = Tickets.objects.filter(clienteid=cliente.clienteid)
+        tickets_clientes.delete()
         cliente.delete()
 
     usuario.delete()

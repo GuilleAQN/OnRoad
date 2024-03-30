@@ -49,4 +49,14 @@
       </script>
     {% endfor %}
   {% endif %}
+
+
+  {% if not request.user.is_authenticated %}
+    {% if is_a_logout %}
+    <script>
+        Swal.fire('Fuera de sesión', 'Su sesión ha expirado. Favor iniciar sesión de nuevo para poder continuar', 'warning');
+    </script>
+    {% endif %}
+  {% endif %}
+
 {% endblock %}

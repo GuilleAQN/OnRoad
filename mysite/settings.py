@@ -54,6 +54,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django_session_timeout.middleware.SessionTimeoutMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -121,7 +122,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SESSION_EXPIRE_SECONDS = 5400
+SESSION_TIMEOUT_REDIRECT = '/'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 AUTH_USER_MODEL = 'myapp.Usuarios'
+
 
 # Internationalization
 LANGUAGE_CODE = 'es-mx'

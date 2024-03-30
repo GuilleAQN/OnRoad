@@ -11,6 +11,11 @@ class EstadoVehiculo(Enum):
     MANTENIMIENTO = 'Mantenimiento'
 
 
+class EstadoTicket(Enum):
+    RESERVADO = 'Reservado'
+    USADO = 'Usado'
+
+
 class Clientes(models.Model):
     clienteid = models.AutoField(primary_key=True, verbose_name='ID')
     nombre = models.CharField(max_length=50, verbose_name='Nombre')
@@ -87,8 +92,10 @@ class Tickets(models.Model):
         'Viajes', models.DO_NOTHING, db_column='viajeid', verbose_name='ID del Viaje')
     fechareservacion = models.DateTimeField(
         blank=True, null=True, verbose_name='Fecha de Reservación')
+    estado_opciones = [(estado.value, estado.name)
+                       for estado in EstadoTicket]
     estadoticket = models.CharField(
-        max_length=10, blank=True, null=True, verbose_name='Estado')
+        max_length=10, blank=True, null=True, choices=estado_opciones, default=EstadoTicket.RESERVADO.value, verbose_name='Estado')
     preciototal = models.DecimalField(
         max_digits=10, decimal_places=2, verbose_name='Valor Total del Ticket')
 
