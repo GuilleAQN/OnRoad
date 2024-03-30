@@ -14,7 +14,6 @@ def signin(request):
         return render(request, "signin.html", {"form": form})
     else:
         form = SignInForm(request.POST)
-        print(form.errors)
         if form.is_valid():
             usuario = form.cleaned_data['usuario']
             contraseña = form.cleaned_data['contraseña']
@@ -37,7 +36,9 @@ def signup(request):
 
         if formUsuario.is_valid() and formCliente.is_valid():
             nombre = formCliente.cleaned_data['nombre']
+            print(nombre)
             apellido = formCliente.cleaned_data['apellido']
+            print(apellido)
 
             nombre_usuario = generar_nombre_usuario(nombre, apellido)
             print(nombre_usuario)
@@ -70,7 +71,6 @@ def signup(request):
 @login_required
 def pagina_principal(request):
     rol = "capas/baseadmin.html" if request.user.rolid.rolid == 1 else "capas/base.html"
-    print(rol)
 
     return render(request, "index.html", {
         'rol': rol,
@@ -129,16 +129,13 @@ def create_usuario(request):
             if formUsuario.is_valid() and formCliente.is_valid():
                 nombre = formCliente.cleaned_data['nombre']
                 apellido = formCliente.cleaned_data['apellido']
-                print(nombre)
 
                 nombre_usuario = generar_nombre_usuario(nombre=nombre, apellido=apellido)
-                print(nombre_usuario)
 
                 cliente = formCliente.save(commit=False)
                 usuario = formUsuario.save(commit=False, rol=2)
 
                 usuario.nombreusuario = nombre_usuario
-                print(usuario.nombreusuario)
                 cliente.save()
                 usuario.save()
 
