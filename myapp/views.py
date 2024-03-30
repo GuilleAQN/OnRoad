@@ -1,3 +1,4 @@
+import uuid
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
@@ -11,11 +12,7 @@ from .forms import SignInForm, SignUpForm, NuevoUsuarioForm, NuevoAdminForm, Nue
 def signin(request):
     if request.method == "GET":
         form = SignInForm()
-        if 'is_a_logout' in request.GET:
-            is_a_logout = False
-        else:
-            is_a_logout = True
-        return render(request, "signin.html", {"form": form, 'is_a_logout': is_a_logout})
+        return render(request, "signin.html", {"form": form})
     else:
         form = SignInForm(request.POST)
         if form.is_valid():
@@ -42,9 +39,7 @@ def signup(request):
 
         if formUsuario.is_valid() and formCliente.is_valid():
             nombre = formCliente.cleaned_data['nombre']
-            print(nombre)
             apellido = formCliente.cleaned_data['apellido']
-            print(apellido)
 
             nombre_usuario = generar_nombre_usuario(nombre, apellido)
 
@@ -86,7 +81,7 @@ def pagina_principal(request):
 @login_required
 def signout(request):
     logout(request)
-    return redirect('signin', is_a_logout=False)
+    return redirect('signin')
 
 
 @login_required
@@ -308,7 +303,7 @@ def see_conductores(request):
 def delete_ruta(request, id):
     ruta = get_object_or_404(Rutas, rutaid=id)
     ruta.delete()
-    messages.success(request, 'Se ha eliminado el viaje de manera exitosa.')
+    messages.success(request, 'Se ha eliminado la ruta de manera exitosa.')
     return redirect('ver_rutas')
 
 
@@ -324,27 +319,15 @@ def delete_viaje(request, id):
 def delete_vehiculo(request, id):
     vehiculo = get_object_or_404(Vehiculos, vehiculoid=id)
     vehiculo.delete()
-    messages.success(request, 'Se ha eliminado el viaje de manera exitosa.')
+    messages.success(request, 'Se ha eliminado el vehiculo de manera exitosa.')
     return redirect('ver_vehiculos')
 
 
 @login_required
 def delete_usuario(request, id):
     usuario = get_object_or_404(Usuarios, usuarioid=id)
-    tipo_usuario = usuario.rolid
-
-    if tipo_usuario.rolid == 3:
-        conductor = get_object_or_404(
-            Conductores, conductorid=tipo_usuario.rolid)
-        conductor.delete()
-    elif tipo_usuario.rolid == 2:
-        cliente = get_object_or_404(Clientes, clienteid=tipo_usuario.rolid)
-        tickets_clientes = Tickets.objects.filter(clienteid=cliente.clienteid)
-        tickets_clientes.delete()
-        cliente.delete()
-
     usuario.delete()
-    messages.success(request, 'Se ha eliminado el viaje de manera exitosa.')
+    messages.success(request, 'Se ha eliminado el usuario de manera exitosa.')
     return redirect('ver_usuarios')
 
 
@@ -352,6 +335,6 @@ def delete_usuario(request, id):
 def delete_conductor(request, id):
     conductor = get_object_or_404(Conductores, id=id)
     conductor.delete()
-
-    messages.success(request, 'Se ha eliminado el viaje de manera exitosa.')
+    messages.success(
+        request, 'Se ha eliminado el conductor de manera exitosa.')
     return redirect('ver_conductores')
