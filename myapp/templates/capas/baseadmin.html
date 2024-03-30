@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="{% static '/css/estilo.css' %}" />
   </head>
 
-  <body class="bg-secondary">
+  <body class="bg-dark">
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark" id="nave">
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'pagina_principal' %}">
@@ -36,7 +36,7 @@
       </div>
     </nav>
 
-    <nav class="navbar navbar-expand-sm bg-info-subtle justify-content-center">Perfil Administrativo</nav>
+    <nav class="navbar navbar-expand-sm bg-info-subtle py-3 justify-content-center text-grey"><h4>Perfil Administrativo</h4></nav>
 
     <button class="btn btn-primary bg-info-subtle my-3 mx-4 text-black" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">Menú📃</button>
 
@@ -125,8 +125,9 @@
     {% block content %}
 
     {% endblock %}
-    <div class="container">
-      <footer class="py-3 my-4">
+
+    <div class="container-fluid bg-info-subtle">
+      <footer class="py-3 ">
         <ul class="nav justify-content-center border-bottom pb-3 mb-3">
           <li class="text-white">
             <a class="text-black px-2">Ángel de la Cruz 21-1380</a>
@@ -138,7 +139,6 @@
         <p class="text-center text-black">Página Web para gestión de compra de tickets - Proyecto final LP1</p>
       </footer>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   </body>
 </html>
