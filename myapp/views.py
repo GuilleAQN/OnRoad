@@ -42,7 +42,9 @@ def signup(request):
 
         if formUsuario.is_valid() and formCliente.is_valid():
             nombre = formCliente.cleaned_data['nombre']
+            print(nombre)
             apellido = formCliente.cleaned_data['apellido']
+            print(apellido)
 
             nombre_usuario = generar_nombre_usuario(nombre, apellido)
 
