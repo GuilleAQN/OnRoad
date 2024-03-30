@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.hashers import make_password
-from .models import Usuarios, Roles, Conductores, Clientes, Rutas, Vehiculos, Viajes, Tickets
+from .models import Usuarios, Roles, Conductores, Clientes, Rutas, Vehiculos, Viajes, Tickets, EstadoVehiculo
 
 
 class SignInForm(forms.Form):
@@ -146,8 +146,8 @@ class NuevoConductorForm(forms.ModelForm):
 class NuevoViajesForm(forms.ModelForm):
     class Meta:
         model = Viajes
-        fields = ['rutaid', 'vehiculoid', 'fechahorasalida',
-                  'fechahorallegadaestimada', 'cuposdisponibles']
+        fields = ['rutaid', 'vehiculoid',
+                  'fechahorasalida', 'fechahorallegadaestimada']
         widgets = {
             'rutaid': forms.Select(attrs={
                 'id': 'rutas',
@@ -167,13 +167,19 @@ class NuevoViajesForm(forms.ModelForm):
                 'class': 'form-control',
                 'type': 'datetime-local'
             }),
-            'cuposdisponibles': forms.NumberInput(attrs={
-                'id': 'cupos',
-                'class': 'form-control',
-                'min': 0,
-                'placeholder': 'Introduzca la cantidad de cupos disponibles'
-            }),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['vehiculoid'].queryset = Vehiculos.objects.filter(
+            estado=EstadoVehiculo.DISPONIBLE)
+
+    def save(self, commit=True):
+        viaje = super().save(commit=False)
+        viaje.cuposdisponibles = viaje.vehiculoid.capacidad
+        if commit:
+            viaje.save()
+        return viaje
 
 
 class NuevoVehiculoForm(forms.ModelForm):
@@ -258,38 +264,13 @@ class NuevaRutaForm(forms.ModelForm):
         }
 
 
-# class NuevoTicketForm(forms.ModelForm):
-#     class Meta:
-#         model = Clientes
-#         fields = ['nombre', 'apellido', 'correoElectronico', 'telefono',
-#                   'direccion', 'contraseña', 'contraseñaConfirmacion']
-#         widgets = {
-#             'nombre': forms.TextInput(attrs={
-#                 'class': 'form-control',
-#                 'placeholder': 'Introduzca su nombre'
-#             }),
-#             'apellido': forms.TextInput(attrs={
-#                 'class': 'form-control',
-#                 'placeholder': 'Introduzca su apellido'
-#             }),
-#             'correoElectronico': forms.EmailInput(attrs={
-#                 'class': 'form-control',
-#                 'placeholder': 'Introduzca su correo electrónico'
-#             }),
-#             'telefono': forms.TextInput(attrs={
-#                 'class': 'form-control',
-#                 'placeholder': 'Introduzca su teléfono'
-#             }),
-#             'direccion': forms.TextInput(attrs={
-#                 'class': 'form-control',
-#                 'placeholder': 'Introduzca su dirección'
-#             }),
-#             'contraseña': forms.PasswordInput(attrs={
-#                 'class': 'form-control',
-#                 'placeholder': 'Introduzca su contraseña'
-#             }),
-#             'contraseñaConfirmacion': forms.PasswordInput(attrs={
-#                 'class': 'form-control',
-#                 'placeholder': 'Introduzca su contraseña de nuevo'
-#             }),
-#         }
+class NuevoTicketForm(forms.ModelForm):
+    class Meta:
+        model = Tickets
+        fields = ['ticketid', 'viajeid', 'estadoticket']
+        widgets = {
+            'viajeid': forms.Select(attrs={
+                'id': 'viajes',
+                'class': 'form-control',
+            }),
+        }
