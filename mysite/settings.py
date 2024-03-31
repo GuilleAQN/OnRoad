@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from email.policy import default
+from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
@@ -54,12 +55,12 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django_session_timeout.middleware.SessionTimeoutMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_auto_logout.middleware.auto_logout',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -75,6 +76,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django_auto_logout.context_processors.auto_logout_client',
             ],
         },
     },
@@ -122,10 +124,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-SESSION_EXPIRE_SECONDS = 5400
-SESSION_TIMEOUT_REDIRECT = '/'
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
 AUTH_USER_MODEL = 'myapp.Usuarios'
 
 
@@ -152,3 +150,12 @@ STATICFILES_DIRS = [
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Auto LogOut
+AUTO_LOGOUT = {
+    'SESSION_TIME': timedelta(hours=1),
+    'IDLE_TIME': timedelta(minutes=10),
+    'MESSAGE': 'La sesión ha expirado. Favor inicie sesión de nuevo para continuar.',
+    'REDIRECT_TO_LOGIN_IMMEDIATELY': True
+}

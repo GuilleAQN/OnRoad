@@ -3,6 +3,7 @@
   OnRoad
 {% endblock %}
 {% block content %}
+
   <div class="container-sm p-5 my-5 bg-info-subtle text-black rounded">
     <form method="POST">
       {% csrf_token %}
@@ -38,25 +39,17 @@
     </nav>
   </div>
 
-  
-    
-  
-
-  {% if messages %}
+  {% if messages.tags == 'error' %}
     {% for message in messages %}
       <script>
         Swal.fire('Error', '{{ message }}', 'error')
       </script>
     {% endfor %}
+    {% elif messages %}
+    {% for message in messages %}
+      <script>
+        Swal.fire('Sesión expirada', '{{ message }}', 'warning')
+      </script>
+    {% endfor %}
   {% endif %}
-
-
-  {% if not request.user.is_authenticated %}
-    {% if is_a_logout %}
-    <script>
-        Swal.fire('Fuera de sesión', 'Su sesión ha expirado. Favor iniciar sesión de nuevo para poder continuar', 'warning');
-    </script>
-    {% endif %}
-  {% endif %}
-
 {% endblock %}
