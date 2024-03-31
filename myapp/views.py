@@ -270,7 +270,7 @@ def see_viajes(request):
 
 @login_required
 def see_vehiculos(request):
-    vehiculos = Vehiculos.objects.all()
+    vehiculos = Vehiculos.objects.exclude(modelo='Placeholder')
     return render(request, "admin/view_vehiculos.html", {'vehiculos': vehiculos, 'usuario': request.user})
 
 
@@ -309,17 +309,26 @@ def delete_ruta(request, id):
 
 @login_required
 def delete_viaje(request, id):
-    viaje = get_object_or_404(Viajes, rutaid=id)
+    viaje = get_object_or_404(Viajes, viajeid=id)
     viaje.delete()
     messages.success(request, 'Se ha eliminado el viaje de manera exitosa.')
     return redirect('ver_viajes')
 
 
-@login_required
 def delete_vehiculo(request, id):
     vehiculo = get_object_or_404(Vehiculos, vehiculoid=id)
+
+    vehiculo_placeholder = Vehiculos.objects.get(modelo='Placeholder')
+
+    viajes_asociados = Viajes.objects.filter(vehiculoid=id)
+
+    for viaje in viajes_asociados:
+        viaje.vehiculoid = vehiculo_placeholder
+        viaje.save()
+
     vehiculo.delete()
-    messages.success(request, 'Se ha eliminado el vehiculo de manera exitosa.')
+    messages.success(request, 'Se ha eliminado el vehículo de manera exitosa.')
+
     return redirect('ver_vehiculos')
 
 

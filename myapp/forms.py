@@ -172,7 +172,7 @@ class NuevoViajesForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['vehiculoid'].queryset = Vehiculos.objects.filter(
-            estado=EstadoVehiculo.DISPONIBLE)
+            estado=EstadoVehiculo.DISPONIBLE.value)
 
     def save(self, commit=True):
         viaje = super().save(commit=False)
