@@ -89,7 +89,7 @@ class Tickets(models.Model):
     clienteid = models.ForeignKey(
         Clientes, models.DO_NOTHING, db_column='clienteid', verbose_name='ID del Cliente')
     viajeid = models.ForeignKey(
-        'Viajes', models.DO_NOTHING, db_column='viajeid', verbose_name='ID del Viaje')
+        'Viajes', models.CASCADE, blank=True, null=True, db_column='viajeid', verbose_name='ID del Viaje')
     fechareservacion = models.DateTimeField(
         blank=True, null=True, verbose_name='Fecha de Reservación')
     estado_opciones = [(estado.value, estado.name)
@@ -171,7 +171,7 @@ class Viajes(models.Model):
     rutaid = models.ForeignKey(
         Rutas, models.DO_NOTHING, db_column='rutaid', verbose_name='ID de Ruta')
     vehiculoid = models.ForeignKey(
-        Vehiculos, models.DO_NOTHING, db_column='vehiculoid', verbose_name='ID de Vehiculo')
+        Vehiculos, models.DO_NOTHING, blank=True, null=True, db_column='vehiculoid', verbose_name='ID de Vehiculo')
     fechahorasalida = models.DateTimeField(
         verbose_name='Hora de salida del viaje')
     fechahorallegadaestimada = models.DateTimeField(
