@@ -317,18 +317,8 @@ def delete_viaje(request, id):
 
 def delete_vehiculo(request, id):
     vehiculo = get_object_or_404(Vehiculos, vehiculoid=id)
-
-    vehiculo_placeholder = Vehiculos.objects.get(modelo='Placeholder')
-
-    viajes_asociados = Viajes.objects.filter(vehiculoid=id)
-
-    for viaje in viajes_asociados:
-        viaje.vehiculoid = vehiculo_placeholder
-        viaje.save()
-
     vehiculo.delete()
     messages.success(request, 'Se ha eliminado el vehículo de manera exitosa.')
-
     return redirect('ver_vehiculos')
 
 
@@ -342,7 +332,7 @@ def delete_usuario(request, id):
 
 @login_required
 def delete_conductor(request, id):
-    conductor = get_object_or_404(Conductores, id=id)
+    conductor = get_object_or_404(Conductores, conductorid=id)
     conductor.delete()
     messages.success(
         request, 'Se ha eliminado el conductor de manera exitosa.')
