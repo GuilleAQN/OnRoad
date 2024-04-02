@@ -21,18 +21,4 @@
       </div>
     </form>
   </div>
-
-  {% if messages %}
-    {% for message in messages %}
-      {% if message.tags == 'error' %}
-        <script>
-          Swal.fire('Error', '{{ message }}', 'error')
-        </script>
-      {% elif message.tags == 'success' %}
-        <script>
-          Swal.fire('Exitó', '{{ message }}', 'success')
-        </script>
-      {% endif %}
-    {% endfor %}
-  {% endif %}
 {% endblock %}
