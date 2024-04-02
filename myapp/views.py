@@ -60,7 +60,8 @@ def signup(request):
 
 @login_required
 def pagina_principal(request):
-    rol = "capas/baseadmin.html" if request.user.rolid.rolid == 1 else ("capas/base.html" if request.user.rolid.rolid == 2 else "capas/baseconductor.html")
+    rol = "capas/baseadmin.html" if request.user.rolid.rolid == 1 else (
+        "capas/base.html" if request.user.rolid.rolid == 2 else "capas/baseconductor.html")
 
     return render(request, "index.html", {
         'rol': rol,
@@ -161,8 +162,9 @@ def create_usuario(request):
                     request, 'Se ha registrado el usuario de manera exitosa.')
                 return redirect('rol_usuario')
 
-        messages.success(
+        messages.error(
             request, 'Ha ocurrido un error, por favor intente de nuevo')
+        print("a")
         return redirect('rol_usuario')
 
 
