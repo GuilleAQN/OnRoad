@@ -155,7 +155,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Auto LogOut
 AUTO_LOGOUT = {
     'SESSION_TIME': timedelta(hours=1),
-    'IDLE_TIME': timedelta(minutes=10),
+    'IDLE_TIME': timedelta(minutes=15),
     'MESSAGE': 'La sesión ha expirado. Favor inicie sesión de nuevo para continuar.',
     'REDIRECT_TO_LOGIN_IMMEDIATELY': True
 }

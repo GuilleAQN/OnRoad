@@ -1,4 +1,5 @@
-import uuid
+from datetime import datetime
+from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
@@ -257,9 +258,49 @@ def create_ruta(request):
 
 
 @login_required
+def buy_ticket(request):
+    if request.method == "GET":
+        fecha = datetime.now()
+        fecha_hora_actual = timezone.make_aware(
+            fecha, timezone.get_current_timezone())
+        viajes = Viajes.objects.filter(
+            fechahorasalida__gte=str(fecha_hora_actual))
+        return render(request, "venta_ticket.html", {"viajes": viajes, 'usuario': request.user})
+    # else:
+    #     formRuta = NuevaRutaForm(request.POST)
+    #     if formRuta.is_valid():
+    #         formRuta.save(commit=False)
+    #         formRuta.save()
+
+    #         messages.success(
+    #             request, 'Se ha registrado el viaje de manera exitosa.')
+    #         return redirect('registro_viaje')
+
+    #     messages.error(
+    #         request, 'Ha ocurrido un error, por favor intente de nuevo.')
+    #     return redirect('registro_viaje')
+
+
+@login_required
 def see_rutas(request):
     rutas = Rutas.objects.all()
     return render(request, "admin/view_rutas.html", {'rutas': rutas, 'usuario': request.user})
+
+
+@login_required
+def my_viajes_completados(request):
+    conductor = get_object_or_404(Conductores, usuarioid=request.user.usuarioid)
+    viajes = Viajes.objects.filter(vehiculoid__conductorid=conductor.conductorid,
+                                                fechahorasalida__lt=timezone.now())
+    return render(request, "admin/view_viajes.html", {'viajes': viajes, 'usuario': request.user})
+
+
+@login_required
+def my_viajes_en_curso(request):
+    conductor = get_object_or_404(Conductores, usuarioid=request.user.usuarioid)
+    viajes = Viajes.objects.filter(vehiculoid__conductorid=conductor.conductorid,
+                                                fechahorasalida__gte=timezone.now())
+    return render(request, "admin/view_viajes.html", {'viajes': viajes, 'usuario': request.user})
 
 
 @login_required
