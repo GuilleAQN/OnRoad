@@ -39,17 +39,17 @@
     </nav>
   </div>
 
-  {% if messages.tags == 'error' %}
-    {% for message in messages %}
+  {% if messages %}
+  {% for message in messages %}
+    {% if message.tags == 'error' %}
       <script>
-        Swal.fire('Error', '{{ message }}', 'error')
+        Swal.fire('Error', '{{ message }}', 'error');
       </script>
-    {% endfor %}
-    {% elif messages %}
-    {% for message in messages %}
+    {% elif message.tags == 'warning' %}
       <script>
-        Swal.fire('Sesión expirada', '{{ message }}', 'warning')
+        Swal.fire('Sesión expirada', '{{ message }}', 'warning');
       </script>
-    {% endfor %}
-  {% endif %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
 {% endblock %}

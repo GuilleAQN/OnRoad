@@ -11,14 +11,7 @@ class CustomAuthBackend(BaseBackend):
                 usuario = Usuarios.objects.get(nombreusuario=cliente.usuarioid)
             else:
                 usuario = Usuarios.objects.get(nombreusuario=nombre_usuario)
-
             if usuario.check_password(contraseña):
                 return usuario
-        except Usuarios.DoesNotExist:
-            return None
-
-    def get_usuario(self, usuario_id):
-        try:
-            return Usuarios.objects.get(pk=usuario_id)
         except Usuarios.DoesNotExist:
             return None

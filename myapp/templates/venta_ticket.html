@@ -17,11 +17,21 @@
             </div>
           </div>
           <div id="collapse{{ forloop.counter }}" class="collapse bg-info-subtle text-white" data-bs-parent="#accordion">
-            <div class="card-body text-black"><strong>No. de ruta</strong>: {{ viaje.viajeid }}</div>
-            <div class="card-body text-black"><strong>Vehículo</strong>: {{ viaje.vehiculoid }}</div>
-            <div class="card-body text-black"><strong>Fecha y hora de salida</strong>: {{ viaje.fechahorasalida }}</div>
-            <div class="card-body text-black"><strong>Fecha y hora de llegada</strong>: {{ viaje.fechahorallegadaestimada }}</div>
-            <div class="card-body text-black"><strong>Cupos disponibles</strong>: {{ viaje.cuposdisponibles }}</div>
+            <div class="card-body text-black">
+              <strong>No. de ruta</strong>: {{ viaje.viajeid }}
+            </div>
+            <div class="card-body text-black">
+              <strong>Vehículo</strong>: {{ viaje.vehiculoid }}
+            </div>
+            <div class="card-body text-black">
+              <strong>Fecha y hora de salida</strong>: {{ viaje.fechahorasalida }}
+            </div>
+            <div class="card-body text-black">
+              <strong>Fecha y hora de llegada</strong>: {{ viaje.fechahorallegadaestimada }}
+            </div>
+            <div class="card-body text-black">
+              <strong>Cupos restantes</strong>: {{ viaje.cuposdisponibles }}
+            </div>
           </div>
         </div>
       {% endfor %}

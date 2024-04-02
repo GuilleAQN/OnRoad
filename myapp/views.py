@@ -5,7 +5,6 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from .backends import CustomAuthBackend
 from django.contrib import messages
-from django.http import JsonResponse
 from .models import Usuarios, Clientes, Conductores, Vehiculos, Rutas, Viajes, Roles, Tickets, generar_nombre_usuario
 from .forms import SignInForm, SignUpForm, NuevoUsuarioForm, NuevoAdminForm, NuevoClienteForm, NuevoConductorForm,  NuevoViajesForm, NuevoVehiculoForm, NuevaRutaForm
 
@@ -59,19 +58,9 @@ def signup(request):
         return render(request, "signup.html", {"formUsuario": formUsuario, "formCliente": formCliente})
 
 
-# @login_required
-# def info_view(request):
-#     objects = Usuarios.objects.all()
-
-#     data = [{'Id': obj.usuarioid, 'Nombre': obj.nombreusuario}
-#             for obj in objects]
-
-#     return JsonResponse({'Respuestas': data})
-
-
 @login_required
 def pagina_principal(request):
-    rol = "capas/baseadmin.html" if request.user.rolid.rolid == 1 else "capas/base.html"
+    rol = "capas/baseadmin.html" if request.user.rolid.rolid == 1 else ("capas/base.html" if request.user.rolid.rolid == 2 else "capas/baseconductor.html")
 
     return render(request, "index.html", {
         'rol': rol,
@@ -289,18 +278,20 @@ def see_rutas(request):
 
 @login_required
 def my_viajes_completados(request):
-    conductor = get_object_or_404(Conductores, usuarioid=request.user.usuarioid)
+    conductor = get_object_or_404(
+        Conductores, usuarioid=request.user.usuarioid)
     viajes = Viajes.objects.filter(vehiculoid__conductorid=conductor.conductorid,
-                                                fechahorasalida__lt=timezone.now())
-    return render(request, "admin/view_viajes.html", {'viajes': viajes, 'usuario': request.user})
+                                   fechahorasalida__lt=timezone.now())
+    return render(request, "proximos_viajes.html", {'viajes': viajes, 'usuario': request.user})
 
 
 @login_required
 def my_viajes_en_curso(request):
-    conductor = get_object_or_404(Conductores, usuarioid=request.user.usuarioid)
+    conductor = get_object_or_404(
+        Conductores, usuarioid=request.user.usuarioid)
     viajes = Viajes.objects.filter(vehiculoid__conductorid=conductor.conductorid,
-                                                fechahorasalida__gte=timezone.now())
-    return render(request, "admin/view_viajes.html", {'viajes': viajes, 'usuario': request.user})
+                                   fechahorasalida__gte=timezone.now())
+    return render(request, "viajes_completados.html", {'viajes': viajes, 'usuario': request.user})
 
 
 @login_required

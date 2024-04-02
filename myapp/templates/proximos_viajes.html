@@ -1,0 +1,45 @@
+{% extends 'capas/baseconductor.html' %}
+
+{% block title %}
+  Próximos viajes
+{% endblock %}
+
+{% block content %}
+  {{ block.super }}
+  {% if viajes %}
+    <div class="container my-5 rounded">
+      <div id="accordion">
+        {% for viaje in viajes %}
+          <div class="card my-4 text-white">
+            <div class="card-header bg-white text-black d-flex justify-content-between align-items-center">
+              <a class="btn text-black" data-bs-toggle="collapse" href="#collapse{{ forloop.counter }}">Viaje {{ viaje.viajeid }}</a>
+              <div class="align-items-right">
+                <a class="btn text-bg-red text-white" onclick="confirmación({{ viaje.viajeid }})" alt="Eliminar" title="Eliminar"><i class="fa-solid fa-trash" style="color: #cf2507;"></i></a>
+                <a class="btn text-bg-green text-white" href="editar_viaje/" alt=" Editar" title="Editar"><i class="fa-solid fa-pen-to-square" style="color: #296ce0;"></i></a>
+              </div>
+            </div>
+            <div id="collapse{{ forloop.counter }}" class="collapse bg-info-subtle text-white" data-bs-parent="#accordion">
+              <div class="card-body text-black">
+                <strong>Identificador de la ruta</strong>: {{ viaje.viajeid }}
+              </div>
+              <div class="card-body text-black">
+                <strong>Identificador del vehículo</strong>: {{ viaje.vehiculoid.placa }}
+              </div>
+              <div class="card-body text-black">
+                <strong>Fecha y hora de salida</strong>: {{ viaje.fechahorasalida }}
+              </div>
+              <div class="card-body text-black">
+                <strong>Fecha y hora de llegada</strong>: {{ viaje.fechahorallegadaestimada }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% else %}
+    <div class="container-sm p-5 my-5 text-white rounded text-center">
+      <h2>No posee ningún viaje hecho hasta el momento.</h2>
+      <p>Favor comunicarse con la administración para en cualquier caso, se le asigne un viaje.</p>
+    </div>
+  {% endif %}
+{% endblock %}
