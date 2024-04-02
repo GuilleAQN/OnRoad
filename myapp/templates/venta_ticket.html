@@ -1,4 +1,4 @@
-{% extends 'capas/baseadmin.html' %}
+{% extends 'capas/base.html' %}
 
 {% block title %}
   Comprar Tickets
@@ -17,15 +17,14 @@
             </div>
           </div>
           <div id="collapse{{ forloop.counter }}" class="collapse bg-info-subtle text-white" data-bs-parent="#accordion">
-            <div class="card-body text-black">Identificador de la ruta: {{ viaje.viajeid }}</div>
-            <div class="card-body text-black">Identificador del vehículo: {{ viaje.vehiculoid.placa }}</div>
-            <div class="card-body text-black">Fecha y hora de salida: {{ viaje.fechahorasalida }}</div>
-            <div class="card-body text-black">Fecha y hora de llegada: {{ viaje.fechahorallegadaestimada }}</div>
-            <div class="card-body text-black">Cupos disponibles: {{ viaje.cuposdisponibles }}</div>
+            <div class="card-body text-black"><strong>No. de ruta</strong>: {{ viaje.viajeid }}</div>
+            <div class="card-body text-black"><strong>Vehículo</strong>: {{ viaje.vehiculoid }}</div>
+            <div class="card-body text-black"><strong>Fecha y hora de salida</strong>: {{ viaje.fechahorasalida }}</div>
+            <div class="card-body text-black"><strong>Fecha y hora de llegada</strong>: {{ viaje.fechahorallegadaestimada }}</div>
+            <div class="card-body text-black"><strong>Cupos disponibles</strong>: {{ viaje.cuposdisponibles }}</div>
           </div>
         </div>
       {% endfor %}
     </div>
   </div>
-  
 {% endblock %}

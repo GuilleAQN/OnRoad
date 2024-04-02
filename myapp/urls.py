@@ -20,7 +20,6 @@ urlpatterns = [
     path("ver_conductores/", views.see_conductores, name="ver_conductores"),
     path("mis_tickets/", views.see_my_tickets, name="mis_tickets"),
 
-
     path("eliminar_ruta/<int:id>", views.delete_ruta, name="eliminar_ruta"),
     path("eliminar_viaje/<int:id>", views.delete_viaje, name="eliminar_viaje"),
     path("eliminar_vehiculo/<int:id>",
@@ -30,8 +29,9 @@ urlpatterns = [
     path("eliminar_conductor/<int:id>",
          views.delete_conductor, name="eliminar_conductor"),
 
-
-    # path("venta_ticket/",views.venta_ticket,name="venta"),
+    path("venta_ticket/",views.buy_ticket,name="comprar_ticket"),
+    path("mis_viajes/",views.my_viajes_en_curso,name="mis_viajes"),
+    path("historial_viajes/",views.my_viajes_completados,name="historial_viajes"),
 ]
 
 if settings.DEBUG:

@@ -11,6 +11,7 @@
     <p>Listado de tickets adquiridos</p>
   </div>
   <div class="container my-5 rounded">
+    {% if tickets %}
     <div id="accordion">
       {% for ticket in tickets %}
         <div class="card my-4 text-black">
@@ -34,5 +35,8 @@
         </div>
       {% endfor %}
     </div>
+    {% else %}
+    
+    {% endif %}
   </div>
 {% endblock %}
