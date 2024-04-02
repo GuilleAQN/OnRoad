@@ -71,3 +71,7 @@ a {
 body {
   background-color: gray;
 }
+.carousel-img {
+  width: 50%; /* Aquí puedes ajustar el tamaño según tus necesidades */
+  margin: auto; /* Esto centra la imagen horizontalmente dentro del carrusel */
+}

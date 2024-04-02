@@ -19,7 +19,7 @@
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark" id="nave">
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'pagina_principal' %}">
-          <img src="{% static '/img/im.webp' %}" alt="Logo de OnRoad" style="width:100px;" class="rounded-pill" />
+          <img src="{% static '/img/Log.svg' %}" alt="Logo de OnRoad" style="width:100px;" class="rounded-pill" />
           <h1 class="nombre text-white">OnRoad</h1>
         </a>
       </div>
@@ -35,10 +35,13 @@
         </ul>
       </div>
     </nav>
-
-    <nav class="navbar navbar-expand-sm bg-info-subtle py-3 justify-content-center text-grey"><h4>Perfil Administrativo</h4></nav>
-
-    <button class="btn btn-primary bg-info-subtle my-3 mx-4 text-black" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">Menú📃</button>
+    <nav class="navbar navbar-expand-sm bg-info-subtle py-3 justify-content-center text-grey">
+      <div class="container d-flex justify-content-between align-items-center">
+        <button class="btn btn-primary bg-info-subtle text-black" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">Menú📃</button>
+        <h4 class="mb-0">Perfil Administrativo</h4>
+        <div style="width: 50px;"></div> 
+      </div>
+    </nav>
 
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
       <div class="offcanvas-header bg-dark">
