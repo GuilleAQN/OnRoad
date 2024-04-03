@@ -9,47 +9,51 @@
     <h2>Perfil</h2>
 </div>
 <div class="container-sm p-5 my-5 bg-info-subtle text-black rounded">
-    <h2>Datos de usuario</h2>
-    <div class="form-group row">
-      <div class="col">
-        <label for="usuario">Usuario:</label>
-        <input type="text" class="form-control" id="usuario" name="usuario">
-      </div>
-      <div class="col">
-        <label for="contrasena">Contraseña:</label>
-        <input type="password" class="form-control" id="contrasena" name="contrasena">
-      </div>
+  <h2>Datos de usuario</h2>
+  <div class="form-group row">
+    <div class="col">
+      <label for="usuario">Usuario:</label>
+      <input type="text" class="form-control" id="usuario" name="usuario" readonly>
     </div>
-  
-    <h2>Datos personales</h2>
-    <div class="form-group row">
-      <div class="col">
-        <label for="nombre">Nombre:</label>
-        <input type="text" class="form-control" id="nombre" name="nombre">
-      </div>
-      <div class="col">
-        <label for="apellido">Apellido:</label>
-        <input type="text" class="form-control" id="apellido" name="apellido">
-      </div>
+    <div class="col">
+      <label for="contrasena">Contraseña:</label>
+      <input type="password" class="form-control" id="contrasena" name="contrasena" readonly>
     </div>
-  
-    <div class="form-group my-2">
-      <label for="direccion">Dirección:</label>
-      <input type="text" class="form-control" id="direccion" name="direccion">
-    </div>
-  
-    <div class="form-group row my-2">
-      <div class="col">
-        <label for="telefono">Teléfono:</label>
-        <input type="text" class="form-control" id="telefono" name="telefono">
-      </div>
-      <div class="col">
-        <label for="correo">Correo electrónico:</label>
-        <input type="text" class="form-control" id="correo" name="correo">
-      </div>
-    </div>
-    <button type="submit" class="btn btn-success my-3">Editar</button>
   </div>
+  
+  <h2>Datos personales</h2>
+  <div class="form-group row">
+    <div class="col">
+      <label for="nombre">Nombre:</label>
+      <input type="text" class="form-control" id="nombre" name="nombre" readonly>
+    </div>
+    <div class="col">
+      <label for="apellido">Apellido:</label>
+      <input type="text" class="form-control" id="apellido" name="apellido" readonly>
+    </div>
+  </div>
+  
+  <div class="form-group my-2">
+    <label for="direccion">Dirección:</label>
+    <input type="text" class="form-control" id="direccion" name="direccion" readonly>
+  </div>
+  
+  <div class="form-group row my-2">
+    <div class="col">
+      <label for="telefono">Teléfono:</label>
+      <input type="text" class="form-control" id="telefono" name="telefono" readonly>
+    </div>
+    <div class="col">
+      <label for="correo">Correo electrónico:</label>
+      <input type="text" class="form-control" id="correo" name="correo" readonly>
+    </div>
+  </div>
+  <button type="button" class="btn btn-primary my-3" id="btnEditar">Editar</button>
+  <button type="submit" class="btn btn-success my-3" id="btnGuardar" style="display:none;">Guardar</button>
+</div>
+
++
+
   
 </div>
 {% endblock %}
