@@ -1,59 +1,57 @@
 {% extends rol %}
 
-{% block title %}Perfil{% endblock %}
+{% block title %}
+  Perfil
+{% endblock %}
 
 {% block content %}
-{{ block.super }}
-<div class="bg-dark">
-  <div class="container-sm p-5 my-5 bg-info-subtle text-black rounded">
-    <h2>Perfil</h2>
-</div>
-<div class="container-sm p-5 my-5 bg-info-subtle text-black rounded">
-  <h2>Datos de usuario</h2>
-  <div class="form-group row">
-    <div class="col">
-      <label for="usuario">Usuario:</label>
-      <input type="text" class="form-control" id="usuario" name="usuario" readonly>
+  {{ block.super }}
+  <div class="bg-dark">
+    <div class="container-sm p-5 my-5 bg-info-subtle text-black rounded">
+      <h2>Perfil</h2>
     </div>
-    <div class="col">
-      <label for="contrasena">Contraseña:</label>
-      <input type="password" class="form-control" id="contrasena" name="contrasena" readonly>
-    </div>
-  </div>
-  
-  <h2>Datos personales</h2>
-  <div class="form-group row">
-    <div class="col">
-      <label for="nombre">Nombre:</label>
-      <input type="text" class="form-control" id="nombre" name="nombre" readonly>
-    </div>
-    <div class="col">
-      <label for="apellido">Apellido:</label>
-      <input type="text" class="form-control" id="apellido" name="apellido" readonly>
-    </div>
-  </div>
-  
-  <div class="form-group my-2">
-    <label for="direccion">Dirección:</label>
-    <input type="text" class="form-control" id="direccion" name="direccion" readonly>
-  </div>
-  
-  <div class="form-group row my-2">
-    <div class="col">
-      <label for="telefono">Teléfono:</label>
-      <input type="text" class="form-control" id="telefono" name="telefono" readonly>
-    </div>
-    <div class="col">
-      <label for="correo">Correo electrónico:</label>
-      <input type="text" class="form-control" id="correo" name="correo" readonly>
-    </div>
-  </div>
-  <button type="button" class="btn btn-primary my-3" id="btnEditar">Editar</button>
-  <button type="submit" class="btn btn-success my-3" id="btnGuardar" style="display:none;">Guardar</button>
-</div>
+    <div class="container-sm p-5 my-5 bg-info-subtle text-black rounded">
+      <h2>Datos de usuario</h2>
+      <div class="form-group row">
+        <div class="col">
+          <label for="usuario">Usuario:</label>
+          <input type="text" class="form-control" id="usuario" name="usuario" value="{{ usuario.nombreusuario }}" readonly />
+        </div>
+        <div class="col">
+          <label for="contrasena">Contraseña:</label>
+          <input type="password" class="form-control" id="contrasena" name="contrasena" value="{{ usuario.password }}" readonly />
+        </div>
+      </div>
 
-+
+      <h2>Datos personales</h2>
+      <div class="form-group row">
+        <div class="col">
+          <label for="nombre">Nombre:</label>
+          <input type="text" class="form-control" id="nombre" name="nombre" value="{{ datos.nombre }}" readonly />
+        </div>
+        <div class="col">
+          <label for="apellido">Apellido:</label>
+          <input type="text" class="form-control" id="apellido" name="apellido" value="{{ datos.apellido }}" readonly />
+        </div>
+      </div>
 
-  
-</div>
+      <div class="form-group my-2">
+        <label for="direccion">Dirección:</label>
+        <input type="text" class="form-control" id="direccion" name="direccion" value="{{ datos.direccion }}" readonly />
+      </div>
+
+      <div class="form-group row my-2">
+        <div class="col">
+          <label for="telefono">Teléfono:</label>
+          <input type="text" class="form-control" id="telefono" name="telefono" value="{{ datos.telefono }}" readonly />
+        </div>
+        <div class="col">
+          <label for="correo">Correo electrónico:</label>
+          <input type="text" class="form-control" id="correo" name="correo" value="{{ datos.correoelectronico }}" readonly />
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary my-3" id="btnEditar">Editar</button>
+      <button type="submit" class="btn btn-success my-3" id="btnGuardar" style="display:none;">Guardar</button>
+    </div>
+  </div>
 {% endblock %}

@@ -78,7 +78,9 @@ def signout(request):
 @login_required
 def see_perfil(request):
     rol = "capas/baseadmin.html" if request.user.rolid.rolid == 1 else "capas/base.html"
-    return render(request, "perfil.html", {"rol": rol, "usuario": request.user})
+    datos_usuario = get_object_or_404(
+        Clientes, usuarioid=request.user.usuarioid)
+    return render(request, "perfil.html", {"rol": rol, "usuario": request.user, "datos": datos_usuario})
 
 
 @login_required
@@ -164,7 +166,6 @@ def create_usuario(request):
 
         messages.error(
             request, 'Ha ocurrido un error, por favor intente de nuevo')
-        print("a")
         return redirect('rol_usuario')
 
 
