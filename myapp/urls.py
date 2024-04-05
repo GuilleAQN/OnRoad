@@ -30,6 +30,10 @@ urlpatterns = [
          views.delete_conductor, name="eliminar_conductor"),
 
     path("venta_ticket/",views.buy_ticket,name="comprar_ticket"),
+    path("pago_satisfactorio",views.succesful_pay,name="pago_satisfactorio"),
+    path("pago_cancelado",views.cancelled_pay,name="pago_cancelado"),
+    path("stripe_webhook",views.stripe_webhook,name="stripe_webhook"),
+    
     path("mis_viajes/",views.my_viajes_en_curso,name="mis_viajes"),
     path("historial_viajes/",views.my_viajes_completados,name="historial_viajes"),
 ]

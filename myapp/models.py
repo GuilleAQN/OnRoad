@@ -1,6 +1,9 @@
 import uuid
+from django.dispatch import receiver
+from django.utils import timezone
 from enum import Enum
 from django.db import models
+from django.db.models.signals import post_save
 from django.contrib.auth.models import AbstractBaseUser
 from .managers import CustomUsuarioManager
 
@@ -32,6 +35,26 @@ class Clientes(models.Model):
     class Meta:
         app_label = 'myapp'
         db_table = 'clientes'
+
+
+class ClienteFormaDePago(models.Model):
+    cliente = models.ForeignKey(Clientes, on_delete=models.CASCADE)
+    pago_realizado = models.BooleanField(default=False, verbose_name='Pago Realizado')
+    stripe_checkout_id = models.CharField(max_length=100, verbose_name='ID de Stripe Checkout')
+
+    class Meta:
+        verbose_name = 'Cliente Forma de Pago'
+        verbose_name_plural = 'Clientes Forma de Pago'
+        db_table = 'clienteformadepago'
+
+    def __str__(self):
+        return f"Cliente: {self.cliente}, Pago Realizado: {self.pago_realizado}"
+
+
+@receiver(post_save, sender=Clientes)
+def crear_metodo_pago(sender, instance, created, **kwargs):
+    if created:
+        ClienteFormaDePago.objects.create(cliente=instance)
 
 
 class Conductores(models.Model):
@@ -91,13 +114,20 @@ class Tickets(models.Model):
     viajeid = models.ForeignKey(
         'Viajes', models.CASCADE, blank=True, null=True, db_column='viajeid', verbose_name='ID del Viaje')
     fechareservacion = models.DateTimeField(
-        blank=True, null=True, verbose_name='Fecha de Reservación')
+        blank=True, null=True, default=timezone.now, verbose_name='Fecha de Reservación')
     estado_opciones = [(estado.value, estado.name)
                        for estado in EstadoTicket]
     estadoticket = models.CharField(
         max_length=10, blank=True, null=True, choices=estado_opciones, default=EstadoTicket.RESERVADO.value, verbose_name='Estado')
     preciototal = models.DecimalField(
         max_digits=10, decimal_places=2, verbose_name='Valor Total del Ticket')
+
+    def actualizar_estado(self):
+        if self.viajeid is not None:
+            fecha_llegada_viaje = self.viajeid.fechahorallegadaestimada
+            if self.fechareservacion > fecha_llegada_viaje:
+                self.estadoticket = EstadoTicket.USADO.value
+                self.save()
 
     class Meta:
         app_label = 'myapp'
