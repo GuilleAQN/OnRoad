@@ -263,14 +263,3 @@ class NuevaRutaForm(forms.ModelForm):
             }),
         }
 
-
-class NuevoTicketForm(forms.ModelForm):
-    class Meta:
-        model = Tickets
-        fields = ['ticketid', 'viajeid', 'estadoticket']
-        widgets = {
-            'viajeid': forms.Select(attrs={
-                'id': 'viajes',
-                'class': 'form-control',
-            }),
-        }
