@@ -16,20 +16,20 @@
         <div id="accordion">
           <div class="card my-4 text-black">
             <div class="card-header bg-white text-black d-flex justify-content-between align-items-center">
-              <a class="btn text-black" data-bs-toggle="collapse" href="#collapse{{ forloop.counter }}">Ticket {{ tickets.ticketid }}</a>
+              <a class="btn text-black" data-bs-toggle="collapse" href="#collapse{{ forloop.counter }}">Ticket {{ ticket.ticketid }}</a>
             </div>
             <div id="collapse{{ forloop.counter }}" class="collapse show bg-info-subtle text-white" data-bs-parent="#accordion">
               <div class="card-body text-black">
-                <strong>Identificador del viaje</strong>: {{ tickets.viajeid.viajeid }}
+                <strong>Ruta</strong>: {{ ticket.viajeid.rutaid }}
               </div>
               <div class="card-body text-black">
-                <strong>Fecha reservación</strong>: {{ tickets.fechareservacion }}
+                <strong>Fecha reservación</strong>: {{ ticket.fechareservacion }}
               </div>
               <div class="card-body text-black">
-                <strong>Estado</strong>: {{ tickets.estadoticket }}
+                <strong>Estado</strong>: {{ ticket.estadoticket }}
               </div>
               <div class="card-body text-black">
-                <strong>Precio</strong>: RD${{ tickets.preciototal }}
+                <strong>Precio</strong>: RD${{ ticket.preciototal }}
               </div>
             </div>
           </div>
