@@ -1,55 +1,18 @@
-#boton {
-  font-size: 40px;
-  position: relative;
-  top: 0px;
-  bottom: 60px;
-  left: 820px;
-  right: 0px;
-  display: inline;
-}
-
-
-.nombres {
-  font-size: 60px;
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  display: inline-block; /* Cambiado de 'inline' a 'inline-block' para aplicar text-align */
-  text-align: center; /* Centrar el contenido */
-  position: relative;
-  top: 15px;
-  bottom: 20px;
-  left: 20px;
-  right: 0px;
-}
-
-.nombre {
-  font-size: 60px;
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  display: inline;
-  position: relative;
-  top: 15px;
-  bottom: 20px;
-  left: 20px;
-  right: 0px;
-}
-
-#register{
-  color: blue;
-}
-
-h6{
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+body {
+  background-color: gray;
 }
 
 a {
-  text-decoration: none;
-  text-decoration-line: none;
+text-decoration: none;
+text-decoration-line: none;
   color: black;
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
 }
 
-#footer {
+h6 {
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
 }
+
 .navbar-brand {
   position: relative;
   top: 0px;
@@ -68,10 +31,50 @@ a {
   position: relative;
   top: 15px;
 }
-body {
-  background-color: gray;
-}
+
 .carousel-img {
-  width: 50%; /* Aquí puedes ajustar el tamaño según tus necesidades */
-  margin: auto; /* Esto centra la imagen horizontalmente dentro del carrusel */
+  width: 50%;
+  margin: auto;
+}
+
+.nombres {
+  font-size: 60px;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  display: inline-block;
+  text-align: center;
+  position: relative;
+  top: 15px;
+  bottom: 20px;
+  left: 20px;
+  right: 0px;
+}
+
+.nombre {
+  font-size: 60px;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  display: inline;
+  position: relative;
+  top: 15px;
+  bottom: 20px;
+  left: 20px;
+  right: 0px;
+}
+
+#boton {
+  font-size: 40px;
+  position: relative;
+  top: 0px;
+  bottom: 60px;
+  left: 820px;
+  right: 0px;
+  display: inline;
+}
+
+#register{
+  color: blue;
+}
+
+
+#footer {
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
 }
