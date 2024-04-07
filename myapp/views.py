@@ -67,8 +67,8 @@ def signup(request):
 
 @login_required
 def pagina_principal(request):
-    rol = "capas/baseadmin.html" if request.user.rolid.rolid == 1 else (
-        "capas/base.html" if request.user.rolid.rolid == 2 else "capas/baseconductor.html")
+    rol = "bases/baseadmin.html" if request.user.rolid.rolid == 1 else (
+        "bases/base.html" if request.user.rolid.rolid == 2 else "bases/baseconductor.html")
 
     return render(request, "index.html", {
         'rol': rol,
@@ -84,7 +84,7 @@ def signout(request):
 
 @login_required
 def see_perfil(request):
-    rol = "capas/baseadmin.html" if request.user.rolid.rolid == 1 else "capas/base.html"
+    rol = "bases/baseadmin.html" if request.user.rolid.rolid == 1 else "bases/base.html"
     datos_usuario = get_object_or_404(
         Clientes, usuarioid=request.user.usuarioid)
     return render(request, "perfil.html", {"rol": rol, "usuario": request.user, "datos": datos_usuario})
@@ -289,7 +289,8 @@ def buy_ticket(request):
             ],
             customer_creation='always',
             mode='payment',
-            success_url=url_base + '?session_id={CHECKOUT_SESSION_ID}' + f'&viajeid={viaje_id}',
+            success_url=url_base +
+            '?session_id={CHECKOUT_SESSION_ID}' + f'&viajeid={viaje_id}',
             cancel_url=request.build_absolute_uri(reverse('pago_cancelado'))
         )
 
@@ -306,12 +307,15 @@ def succesful_pay(request):
     try:
         sesion = stripe.checkout.Session.retrieve(checkout_session_id)
     except stripe.error.InvalidRequestError as e:
-        messages.error(request, 'La sesión de pago proporcionada no es válida.')
+        messages.error(
+            request, 'La sesión de pago proporcionada no es válida.')
         return redirect('comprar_ticket')
 
-    cliente_credenciales = get_object_or_404(Clientes, usuarioid=request.user.usuarioid)
+    cliente_credenciales = get_object_or_404(
+        Clientes, usuarioid=request.user.usuarioid)
 
-    cliente_pago, creado = ClienteFormaDePago.objects.get_or_create(cliente=cliente_credenciales)
+    cliente_pago, creado = ClienteFormaDePago.objects.get_or_create(
+        cliente=cliente_credenciales)
     cliente_pago.stripe_checkout_id = checkout_session_id
     cliente_pago.save()
 
@@ -321,10 +325,13 @@ def succesful_pay(request):
             if viaje.cuposdisponibles > 0:
                 viaje.cuposdisponibles -= 1
                 viaje.save()
-                ticket = Tickets.objects.create(clienteid=cliente_credenciales, viajeid=viaje, preciototal=viaje.rutaid.preciobase)
-                messages.success(request, 'Se ha comprado el boleto exitosamente.')
+                ticket = Tickets.objects.create(
+                    clienteid=cliente_credenciales, viajeid=viaje, preciototal=viaje.rutaid.preciobase)
+                messages.success(
+                    request, 'Se ha comprado el boleto exitosamente.')
             else:
-                messages.error(request, 'No hay cupos disponibles para este viaje.')
+                messages.error(
+                    request, 'No hay cupos disponibles para este viaje.')
         except Viajes.DoesNotExist:
             messages.error(request, 'El viaje especificado no existe.')
 
