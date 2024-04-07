@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.hashers import make_password
-from .models import Usuarios, Roles, Conductores, Clientes, Rutas, Vehiculos, Viajes, Tickets, EstadoVehiculo
+from .models import Usuarios, Roles, Conductores, Clientes, Rutas, Vehiculos, Viajes, EstadoVehiculo
 
 
 class SignInForm(forms.Form):
