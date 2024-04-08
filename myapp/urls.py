@@ -29,6 +29,13 @@ urlpatterns = [
     path("eliminar_conductor/<int:id>",
          views.delete_conductor, name="eliminar_conductor"),
 
+
+    path("editar_ruta/<int:id>", views.edit_ruta, name="editar_ruta"),
+    path("editar_viaje/<int:id>", views.edit_viaje, name="editar_viaje"),
+    path("editar_vehiculo/<int:id>", views.edit_vehiculo, name="editar_vehiculo"),
+    path("editar_usuario/<uuid:id>", views.edit_usuario, name="editar_usuario"),
+    path("editar_conductor/<int:id>", views.edit_conductor, name="editar_conductor"),
+
     path("venta_ticket/",views.buy_ticket,name="comprar_ticket"),
     path("pago_satisfactorio",views.succesful_pay,name="pago_satisfactorio"),
     path("pago_cancelado",views.cancelled_pay,name="pago_cancelado"),

@@ -14,7 +14,7 @@
             <a class="btn text-black" data-bs-toggle="collapse" href="#collapse{{ forloop.counter }}">Vehículo {{ vehiculo.vehiculoid }}</a>
             <div class="align-items-right">
               <a class="btn text-bg-red text-white" onclick="confirmacion({{ vehiculo.vehiculoid }})" alt="Eliminar" title="Eliminar"><i class="fa-solid fa-trash" style="color: #cf2507;"></i></a>
-              <a class="btn text-bg-green text-white" href="editar_vehiculo/" alt=" Editar" title="Editar"><i class="fa-solid fa-pen-to-square" style="color: #296ce0;"></i></a>
+              <a class="btn text-bg-green text-white" href="{% url 'editar_vehiculo' id=vehiculo.vehiculoid %}" alt=" Editar" title="Editar"><i class="fa-solid fa-pen-to-square" style="color: #296ce0;"></i></a>
             </div>
           </div>
           <div id="collapse{{ forloop.counter }}" class="collapse bg-info-subtle text-white" data-bs-parent="#accordion">

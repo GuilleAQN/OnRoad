@@ -1,15 +1,28 @@
 {% extends 'bases/baseadmin.html' %}
 
 {% block title %}
-  Nuevo Vehiculo
+  {% if form.instance %}
+    Editar Vehiculo
+  {% else %}
+    Nuevo Vehiculo
+  {% endif %}
 {% endblock %}
 
 {% block content %}
   {{ block.super }}
   <div class="container-sm col-md-8 my-5 bg-info-subtle rounded">
-    <h1 class="text-black">Registro de viajes</h1>
+    <h1 class="text-black">
+      {% if form.instance.id %}
+        Editar Vehiculo (ID: {{ form.instance.vehiculoid }})
+      {% else %}
+        Registro de Vehiculos
+      {% endif %}
+    </h1>
     <form class="row g-3" method="POST">
       {% csrf_token %}
+      {% if form.instance.id %}
+        <input type="hidden" name="id" value="{{ form.instance.id }}" />
+      {% endif %}
       <div class="col-md-6">
         <label for="marca" class="form-label">Marca del vehiculo</label>
         {{ form.marca }}
@@ -39,7 +52,14 @@
         {{ form.conductorid }}
       </div>
       <div class="col-12 my-4">
-        <button type="submit" class="btn btn-primary">Registrar</button>
+        <button type="submit" class="btn btn-primary me-2">
+          {% if form.instance %}
+            Guardar Cambios
+          {% else %}
+            Registrar
+          {% endif %}
+        </button>
+        <a href="{% url 'ver_vehiculos' %}" class="btn btn-secondary">Cancelar</a>
       </div>
     </form>
   </div>

@@ -1,15 +1,28 @@
 {% extends 'bases/baseadmin.html' %}
 
 {% block title %}
-  Nueva Ruta
+  {% if form.instance %}
+    Editar Ruta
+  {% else %}
+    Nueva Ruta
+  {% endif %}
 {% endblock %}
 
 {% block content %}
   {{ block.super }}
   <div class="container-sm col-md-8 my-5 bg-info-subtle rounded">
-    <h1 class="text-black">Registro de rutas</h1>
+    <h1 class="text-black">
+      {% if form.instance.id %}
+        Editar Ruta (ID: {{ form.instance.rutaid }})
+      {% else %}
+        Registro de Rutas
+      {% endif %}
+    </h1>
     <form class="row g-3" method="POST">
       {% csrf_token %}
+      {% if form.instance.id %}
+        <input type="hidden" name="id" value="{{ form.instance.id }}" />
+      {% endif %}
       <div class="col-md-6">
         <label for="origen" class="form-label">Lugar de origen</label>
         {{ form.origen }}
@@ -31,7 +44,14 @@
         {{ form.preciobase }}
       </div>
       <div class="col-12 my-4">
-        <button type="submit" class="btn btn-primary">Registrar</button>
+        <button type="submit" class="btn btn-primary me-2">
+          {% if form.instance %}
+            Guardar Cambios
+          {% else %}
+            Registrar
+          {% endif %}
+        </button>
+        <a href="{% url 'ver_rutas' %}" class="btn btn-secondary">Cancelar</a>
       </div>
     </form>
   </div>

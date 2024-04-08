@@ -14,7 +14,6 @@
             <a class="btn text-black" data-bs-toggle="collapse" href="#collapse{{ forloop.counter }}">Usuario "{{ usuario.nombreusuario }}"</a>
             <div class="align-items-right">
               <a class="btn text-bg-red text-white" onclick="confirmacion('{{ usuario.usuarioid }}')" alt="Eliminar" title="Eliminar"><i class="fa-solid fa-trash" style="color: #cf2507;"></i></a>
-              <a class="btn text-bg-green text-white" href="editar_usuario/" alt=" Editar" title="Editar"><i class="fa-solid fa-pen-to-square" style="color: #296ce0;"></i></a>
             </div>
           </div>
           <div id="collapse{{ forloop.counter }}" class="collapse bg-info-subtle text-white" data-bs-parent="#accordion">

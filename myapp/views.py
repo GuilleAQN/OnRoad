@@ -89,9 +89,14 @@ def signout(request):
 
 @login_required
 def see_perfil(request):
-    rol = "bases/baseadmin.html" if request.user.rolid.rolid == 1 else "bases/base.html"
-    datos_usuario = get_object_or_404(
-        Clientes, usuarioid=request.user.usuarioid)
+    rol = "bases/baseadmin.html" if request.user.rolid.rolid == 1 else (
+        "bases/base.html" if request.user.rolid == 2 else "bases/baseconductor.html")
+    print(request.user.usuarioid)
+    try:
+        datos_usuario = Clientes.objects.get(usuarioid=request.user.usuarioid)
+    except Clientes.DoesNotExist:
+        datos_usuario = Conductores.objects.get(
+            usuarioid=request.user.usuarioid)
     return render(request, "perfil.html", {"rol": rol, "usuario": request.user, "datos": datos_usuario})
 
 
@@ -178,19 +183,18 @@ def create_usuario(request):
                 usuario.save()
                 conductor.save()
 
-
                 template_name = BASE_DIR/"myapp/templates/conductor_respuesta.html"
-                html_contenido =  render_to_string(
+                html_contenido = render_to_string(
                     template_name=template_name,
                     context=informacion
                 )
                 mensaje_plano = strip_tags(html_contenido)
 
                 send_mail(
-                    subject = "Bienvenido a la Familia de OnRoad",
+                    subject="Bienvenido a la Familia de OnRoad",
                     message=mensaje_plano,
-                    recipient_list = [request.POST.get('correo_envio')],
-                    from_email = None,
+                    recipient_list=[request.POST.get('correo_envio')],
+                    from_email=None,
                     html_message=html_contenido,
                     fail_silently=False
                 )
@@ -427,26 +431,6 @@ def my_viajes_en_curso(request):
 
 @login_required
 def see_viajes(request):
-
-    viajes = Viajes.objects.all()
-
-    for viaje in viajes:
-        # Obtener el precio base del viaje
-        # Suponiendo que el precio base está almacenado en el modelo Rutas
-        precio_base_viaje = viaje.rutaid.preciobase
-
-        # Crear un Producto en Stripe para representar el viaje
-        product = stripe.Product.create(
-            name=f'Ruta de viaje: {viaje.rutaid.origen} - {viaje.rutaid.destino}',
-            description=f'Ruta de viaje desde {viaje.rutaid.origen} hasta {viaje.rutaid.destino}',
-        )
-
-        # Crear un Precio asociado al Producto usando el precio base del viaje
-        price = stripe.Price.create(
-            unit_amount=precio_base_viaje * 100,  # Convertir el precio a centavos
-            currency='usd',
-            product=product.id,
-        )
     viajes = Viajes.objects.all()
     return render(request, "admin/view_viajes.html", {'viajes': viajes, 'usuario': request.user})
 
@@ -460,7 +444,7 @@ def see_vehiculos(request):
 @login_required
 def see_tickets(request):
     tickets = Tickets.objects.all()
-    return render(request, "admin/view_tickets.html", {"ticket": tickets, 'usuario': request.user})
+    return render(request, "admin/view_tickets.html", {"tickets": tickets, 'usuario': request.user})
 
 
 @login_required
@@ -521,3 +505,98 @@ def delete_conductor(request, id):
     messages.success(
         request, 'Se ha eliminado el conductor de manera exitosa.')
     return redirect('ver_conductores')
+
+
+@login_required
+def edit_viaje(request, id):
+    viaje = get_object_or_404(Viajes, pk=id)
+
+    if request.method == 'GET':
+        form = NuevoViajesForm(instance=viaje)
+        return render(request, 'admin/create_viaje.html', {'form': form})
+
+    else:
+        form = NuevoViajesForm(request.POST, instance=viaje)
+        if form.is_valid():
+            form.save()
+        messages.success(request, 'Se ha editado el viaje de manera exitosa.')
+        return redirect('ver_viajes')
+
+
+@login_required
+def edit_ruta(request, id):
+    ruta = get_object_or_404(Rutas, pk=id)
+
+    if request.method == 'GET':
+        form = NuevaRutaForm(instance=ruta)
+        return render(request, 'admin/create_ruta.html', {'form': form})
+
+    else:
+        form = NuevaRutaForm(request.POST, instance=ruta)
+        if form.is_valid():
+            form.save()
+        messages.success(request, 'Se ha editado la ruta de manera exitosa.')
+        return redirect('ver_rutas')
+
+
+@login_required
+def edit_vehiculo(request, id):
+    vehiculo = get_object_or_404(Vehiculos, pk=id)
+
+    if request.method == 'GET':
+        form = NuevoVehiculoForm(instance=vehiculo)
+        return render(request, 'admin/create_vehiculo.html', {'form': form})
+
+    else:
+        form = NuevoVehiculoForm(request.POST, instance=vehiculo)
+        if form.is_valid():
+            form.save()
+        messages.success(
+            request, 'Se ha editado el vehiculo de manera exitosa.')
+        return redirect('ver_vehiculos')
+
+
+@login_required
+def edit_conductor(request, id):
+    conductor = get_object_or_404(Conductores, pk=id)
+
+    if request.method == 'GET':
+        form = NuevoConductorForm(instance=conductor)
+        return render(request, 'admin/edit_conductor.html', {'form': form, 'usuario': request.user})
+
+    else:
+        form = NuevoConductorForm(request.POST, instance=conductor)
+        if form.is_valid():
+            form.save()
+        messages.success(
+            request, 'Se ha editado el conductor de manera exitosa.')
+        return redirect('ver_conductores')
+
+
+@login_required
+def edit_usuario(request, id):
+    if request.method == 'GET':
+        rol = "bases/baseadmin.html" if request.user.rolid.rolid == 1 else (
+            "bases/base.html" if request.user.rolid == 2 else "bases/baseconductor.html")
+        try:
+            usuario = Clientes.objects.get(usuarioid=id)
+            form = NuevoClienteForm(instance=usuario)
+        except Clientes.DoesNotExist:
+            usuario = get_object_or_404(Conductores, usuarioid=id)
+            form = NuevoConductorForm(instance=usuario)
+
+        return render(request, 'edit_usuario.html', {'form': form, 'usuario': request.user, 'rol': rol})
+
+    else:
+        try:
+            usuario = Clientes.objects.get(usuarioid=request.user.usuarioid)
+            form = NuevoClienteForm(request.POST, instance=usuario)
+        except Clientes.DoesNotExist:
+            usuario = Conductores.objects.get(usuarioid=request.user.usuarioid)
+            form = NuevoConductorForm(request.POST, instance=usuario)
+
+        if form.is_valid():
+            form.save()
+
+        messages.success(request, 'Se ha editado su perfil de manera exitosa.')
+        return redirect('perfil')

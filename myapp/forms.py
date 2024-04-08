@@ -90,9 +90,10 @@ class NuevoClienteForm(forms.ModelForm):
 
     def save(self, commit=True, usuario=None):
         cliente = super().save(commit=False)
-        cliente.usuarioid = usuario
-        if commit:
-            cliente.save()
+        if usuario is not None:
+            cliente.usuarioid = usuario
+            if commit:
+                cliente.save()
         return cliente
 
 
@@ -137,7 +138,8 @@ class NuevoConductorForm(forms.ModelForm):
 
     def save(self, commit=True, usuario=None):
         conductor = super().save(commit=False)
-        conductor.usuarioid = usuario
+        if usuario is not None:
+            conductor.usuarioid = usuario
         if commit:
             conductor.save()
         return conductor
@@ -262,4 +264,3 @@ class NuevaRutaForm(forms.ModelForm):
                 'placeholder': 'Introduzca el precio'
             }),
         }
-
