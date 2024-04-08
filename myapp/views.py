@@ -6,11 +6,16 @@ from django.utils import timezone
 from django.contrib import messages
 from django.http import HttpResponse
 from django.db import transaction
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+
+from mysite.settings import BASE_DIR
 from .backends import CustomAuthBackend
 from .models import Usuarios, Clientes, Conductores, Vehiculos, Rutas, Viajes, Roles, Tickets, ClienteFormaDePago, generar_nombre_usuario
 from .forms import SignInForm, SignUpForm, NuevoUsuarioForm, NuevoAdminForm, NuevoClienteForm, NuevoConductorForm,  NuevoViajesForm, NuevoVehiculoForm, NuevaRutaForm
@@ -160,12 +165,35 @@ def create_usuario(request):
 
                 nombre_usuario = generar_nombre_usuario(nombre, apellido)
 
+                informacion = {
+                    "nombre_completo": formConductor.cleaned_data['nombre'] + " " + formConductor.cleaned_data['apellido'],
+                    "usuario": nombre_usuario,
+                    "contraseña": formUsuario.cleaned_data['password'],
+                }
+
                 usuario = formUsuario.save(commit=False, rol=3)
                 conductor = formConductor.save(commit=False, usuario=usuario)
 
                 usuario.nombreusuario = nombre_usuario
                 usuario.save()
                 conductor.save()
+
+
+                template_name = BASE_DIR/"myapp/templates/conductor_respuesta.html"
+                html_contenido =  render_to_string(
+                    template_name=template_name,
+                    context=informacion
+                )
+                mensaje_plano = strip_tags(html_contenido)
+
+                send_mail(
+                    subject = "Bienvenido a la Familia de OnRoad",
+                    message=mensaje_plano,
+                    recipient_list = [request.POST.get('correo_envio')],
+                    from_email = None,
+                    html_message=html_contenido,
+                    fail_silently=False
+                )
 
                 messages.success(
                     request, 'Se ha registrado el usuario de manera exitosa.')
