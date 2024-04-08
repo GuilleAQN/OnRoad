@@ -32,6 +32,9 @@ class Clientes(models.Model):
     usuarioid = models.OneToOneField(
         'Usuarios', models.DO_NOTHING, db_column='usuarioid', blank=True, null=True, verbose_name='ID de Usuario')
 
+    def __str__(self):
+        return f"{self.nombre} {self.apellido}"
+
     class Meta:
         app_label = 'myapp'
         db_table = 'clientes'
@@ -39,8 +42,10 @@ class Clientes(models.Model):
 
 class ClienteFormaDePago(models.Model):
     cliente = models.ForeignKey(Clientes, on_delete=models.CASCADE)
-    pago_realizado = models.BooleanField(default=False, verbose_name='Pago Realizado')
-    stripe_checkout_id = models.CharField(max_length=100, verbose_name='ID de Stripe Checkout')
+    pago_realizado = models.BooleanField(
+        default=False, verbose_name='Pago Realizado')
+    stripe_checkout_id = models.CharField(
+        max_length=100, verbose_name='ID de Stripe Checkout')
 
     class Meta:
         verbose_name = 'Cliente Forma de Pago'
