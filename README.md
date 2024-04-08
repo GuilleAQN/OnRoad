@@ -1,6 +1,8 @@
 # OnRoad
 
-Descripción breve del proyecto.
+"OnRoad" es una aplicación web desarrollada con Django que ofrece funcionalidades relacionadas con pagos en línea a través de Stripe, un sistema intermediario de pagos online. La aplicación permite a los usuarios realizar pagos de forma segura utilizando la integración de Stripe, lo que proporciona una experiencia fluida y confiable para los clientes.
+
+Además de las funcionalidades de pago, "OnRoad" puede incluir características adicionales relacionadas con la gestión de información de usuarios, como la creación de cuentas, la gestión de perfiles de usuario, entre otras.
 
 ## Configuración del Entorno
 
@@ -8,7 +10,7 @@ Descripción breve del proyecto.
 
 Asegúrate de tener instalado lo siguiente:
 
-- Python (versión 3.11.8)
+- Python (versión 3.11.9)
 
 ### Instalación
 
@@ -35,6 +37,7 @@ En caso de querer desarrollar, instala las dependencias de desarrollo:
 ```sh
 pip install -r requirements.dev.txt
 ```
+Nota: Para esto, descargar [Stripe CLI](https://docs.stripe.com/stripe-cli), cambiar la secret y public key del archivo ".env", y seguir la documentación de Stripe para correr este proyecto en local.
 
 4. Aplica las migraciones de la base de datos:
 
@@ -55,11 +58,13 @@ La aplicación estará disponible en `http://localhost:8000/`.
 ## Stack Tecnológico
 
 - **Django**: Framework web de Python.
+- **Stripe**: Sistema intermediario de pagos online.
 - **Bootstrap**: Framework CSS para desarrollo web responsivo.
 - **PostgreSQL**: Sistema de gestión de bases de datos relacional.
 - **Render**: Servicio de hosting para aplicaciones web.
 
 [![Django](https://img.shields.io/badge/Django-5.0.2-brightgreen)](https://www.djangoproject.com/)
+[![Stripe](https://img.shields.io/badge/Stripe-Payments-blue)](https://stripe.com/es)
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-5.1.3-blueviolet)](https://getbootstrap.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue)](https://www.postgresql.org/)
 [![Render](https://img.shields.io/badge/Render-Hosting-yellowgreen)](https://render.com/)
@@ -75,3 +80,10 @@ Si deseas contribuir al proyecto, sigue estos pasos:
 5. Abre un pull request.
 
 ## Contacto
+
+Si tienes preguntas, comentarios o sugerencias sobre "OnRoad", no dudes en ponerte en contacto:
+
+- **Nombre**: Omar Guillermo Aquino Mena (Back-End) y Angel Enrique de la Cruz Prevost (Front-End).
+- **Correo Electrónico**: [omarguillermo1@gmail.com](mailto:omarguillermo1@gmail.com) y [ad21-1380@unphu.edu.do](mailto:ad21-1380@unphu.edu.do)
+
+También puedes abrir un problema en el repositorio de GitHub si encuentras algún error o deseas solicitar una nueva característica.
