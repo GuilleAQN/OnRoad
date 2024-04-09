@@ -89,9 +89,7 @@ def signout(request):
 
 @login_required
 def see_perfil(request):
-    rol = "bases/baseadmin.html" if request.user.rolid.rolid == 1 else (
-        "bases/base.html" if request.user.rolid == 2 else "bases/baseconductor.html")
-    print(request.user.usuarioid)
+    rol = "bases/base.html" if request.user.rolid.rolid == 2 else "bases/baseconductor.html"
     try:
         datos_usuario = Clientes.objects.get(usuarioid=request.user.usuarioid)
     except Clientes.DoesNotExist:
@@ -567,9 +565,10 @@ def edit_conductor(request, id):
     else:
         form = NuevoConductorForm(request.POST, instance=conductor)
         if form.is_valid():
+            form.clean()
             form.save()
-        messages.success(
-            request, 'Se ha editado el conductor de manera exitosa.')
+            messages.success(
+                request, 'Se ha editado el conductor de manera exitosa.')
         return redirect('ver_conductores')
 
 
@@ -577,7 +576,7 @@ def edit_conductor(request, id):
 def edit_usuario(request, id):
     if request.method == 'GET':
         rol = "bases/baseadmin.html" if request.user.rolid.rolid == 1 else (
-            "bases/base.html" if request.user.rolid == 2 else "bases/baseconductor.html")
+            "bases/base.html" if request.user.rolid.rolid == 2 else "bases/baseconductor.html")
         try:
             usuario = Clientes.objects.get(usuarioid=id)
             form = NuevoClienteForm(instance=usuario)
