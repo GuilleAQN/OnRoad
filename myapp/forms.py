@@ -136,6 +136,17 @@ class NuevoConductorForm(forms.ModelForm):
             }),
         }
 
+    def clean(self):
+        data_limpia = super().clean()
+        fecha_contratacion = data_limpia.get('fechacontratacion')
+        
+        if not fecha_contratacion:
+            instance = getattr(self, 'instance', None)
+            if instance:
+                data_limpia['fechacontratacion'] = instance.fechacontratacion
+        
+        return data_limpia
+
     def save(self, commit=True, usuario=None):
         conductor = super().save(commit=False)
         if usuario is not None:
@@ -175,6 +186,24 @@ class NuevoViajesForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['vehiculoid'].queryset = Vehiculos.objects.filter(
             estado=EstadoVehiculo.DISPONIBLE.value)
+
+    def clean(self):
+        data_limpia = super().clean()
+        fechahorasalida = data_limpia.get('fechahorasalida')
+        fechahorallegadaestimada = data_limpia.get('fechahorasalida')
+        
+        if not fechahorasalida:
+            instance = getattr(self, 'instance', None)
+            if instance:
+                data_limpia['fechahorasalida'] = instance.fechahorasalida
+
+        if not fechahorallegadaestimada:
+            instance = getattr(self, 'instance', None)
+            if instance:
+                data_limpia['fechahorallegadaestimada'] = instance.fechahorallegadaestimada
+
+        return data_limpia
+
 
     def save(self, commit=True):
         viaje = super().save(commit=False)
