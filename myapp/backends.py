@@ -13,5 +13,5 @@ class CustomAuthBackend(BaseBackend):
                 usuario = Usuarios.objects.get(nombreusuario=nombre_usuario)
             if usuario.check_password(contraseña):
                 return usuario
-        except Usuarios.DoesNotExist:
+        except (Usuarios.DoesNotExist, Clientes.DoesNotExist):
             return None
