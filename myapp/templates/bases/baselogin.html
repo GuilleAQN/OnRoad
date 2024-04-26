@@ -1,58 +1,64 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Descubre OnRoad: una plataforma que te ofrece una experiencia única para reservación de tickets de autobus para viajes. Esto a través de herramientas intuitivas para crear rutas personalizadas, encontrar lugares de interés y compartir tus aventuras con amigos. Únete a la comunidad de viajeros de OnRoad y comienza a explorar hoy mismo." />
-    <title>
-      {% block title %}
 
-      {% endblock %}
-    </title>
-    <link rel="icon" type="image/x-icon" href="{% static '/img/favicon.ico' %}" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="{% static '/css/estilo.css' %}" />
-  </head>
-
-  <body class="bg-dark">
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark" id="nave">
-      <div class="container-fluid">
-        <a class="navbar-brand">
-          <img src="{% static '/img/Logo.svg' %}" alt="Logo de OnRoad" style="width:100px;" class="rounded-pill" />
-          <div class="nombre">OnRoad</div>
-        </a>
-        {% if request.path == '/' %}
-          <a class="btn btn-success custim-btn" href="{% url 'signup' %}">Registrarse</a>
-        {% elif request.path == '/registro/' %}
-          <a class="btn btn-success custim-btn" href="/">Volver al Inicio de Sesión</a>
-        {% endif %}
-      </div>
-    </nav>
-    <nav class="navbar navbar-expand-sm bg-info-subtle justify-content-center">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link">Bienvenido a nuestra página.</a>
-        </li>
-      </ul>
-    </nav>
-    {% block content %}
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Descubre OnRoad: una plataforma que te ofrece una experiencia única para reservación de tickets de autobus para viajes. Esto a través de herramientas intuitivas para crear rutas personalizadas, encontrar lugares de interés y compartir tus aventuras con amigos. Únete a la comunidad de viajeros de OnRoad y comienza a explorar hoy mismo." />
+  <title>
+    {% block title %}
 
     {% endblock %}
-    <div class="container-fluid bg-info-subtle">
-      <footer class="py-3">
-        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-          <li class="text-white">
-            <a class="text-black px-2">Ángel de la Cruz 21-1380</a>
-          </li>
-          <li class="text-white">
-            <a class="text-black px-2">Ruddy Contreras 21-1826</a>
-          </li>
-        </ul>
-        <p class="text-center text-black">Página Web para gestión de compra de tickets - Proyecto final L4G</p>
-      </footer>
+  </title>
+  <link rel="icon" type="image/x-icon" href="{% static '/img/favicon.ico' %}" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="{% static '/css/estilo.css' %}" />
+</head>
+
+<body class="bg-dark">
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark" id="nave">
+    <div class="container-fluid">
+      <a class="navbar-brand">
+        <img src="{% static '/img/Logo.svg' %}" alt="Logo de OnRoad" style="width:100px;" class="rounded-pill" />
+        <div class="nombre">OnRoad</div>
+      </a>
+      {% if request.path == '/' %}
+      <a class="btn btn-success custim-btn" href="{% url 'signup' %}">Registrarse</a>
+      {% elif request.path == '/registro/' %}
+      <a class="btn btn-success custim-btn" href="/">Volver al Inicio de Sesión</a>
+      {% endif %}
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  </body>
+  </nav>
+  <nav class="navbar navbar-expand-sm bg-info-subtle justify-content-center">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link">Bienvenido a nuestra página.</a>
+      </li>
+    </ul>
+  </nav>
+  {% block content %}
+
+  {% endblock %}
+  <div class="container-fluid bg-info-subtle">
+    <footer class="py-3">
+      <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+        <li class="text-white">
+          <a class="text-black px-2">Ángel de la Cruz 21-1380</a>
+        </li>
+        <li class="text-white">
+          <a class="text-black px-2">Omar Aquino 21-0689</a>
+        </li>
+      </ul>
+      <p class="text-center text-black">Página Web para gestión de compra de tickets - Proyecto final LP1</p>
+    </footer>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+</body>
+
 </html>

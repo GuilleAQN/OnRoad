@@ -14,7 +14,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-
 from mysite.settings import BASE_DIR
 from .backends import CustomAuthBackend
 from .models import Usuarios, Clientes, Conductores, Vehiculos, Rutas, Viajes, Roles, Tickets, ClienteFormaDePago, generar_nombre_usuario
