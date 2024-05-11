@@ -490,6 +490,16 @@ def delete_vehiculo(request, id):
 @login_required
 def delete_usuario(request, id):
     usuario = get_object_or_404(Usuarios, usuarioid=id)
+    if usuario.rolid.rolid == 2:
+        cliente = Clientes.objects.get(usuarioid=id)
+        try:
+            tickets = Tickets.objects.get(clienteid=cliente.clienteid)
+            cliente_pago = ClienteFormaDePago.objects.get(cliente=cliente)
+            cliente_pago.delete()
+            tickets.delete()
+        except (Tickets.DoesNotExist):
+            pass
+        cliente.delete()
     usuario.delete()
     messages.success(request, 'Se ha eliminado el usuario de manera exitosa.')
     return redirect('ver_usuarios')
