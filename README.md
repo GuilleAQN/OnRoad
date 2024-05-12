@@ -14,14 +14,15 @@ Además de las funcionalidades de pago, "OnRoad" puede incluir características 
 
 Asegúrate de tener instalado lo siguiente:
 
-- Python (versión 3.11.9)
+- Python (versión 3.11.8)
 
 ### Instalación
 
-1. Clona el repositorio:
+1. Crear un directorio para el repositorio:
 
 ```sh
-git clone https://github.com/GuilleAQN/OnRoad.git
+mkdir Proyecto
+cd Proyecto
 ```
 
 2. Navega al directorio del proyecto:
@@ -30,7 +31,26 @@ git clone https://github.com/GuilleAQN/OnRoad.git
 cd OnRoad
 ```
 
-3. Instala las dependencias principales:
+3. Instalar el entorno virtual con el intérprete a usar:
+
+```sh
+pip install virtualenv -t "/ruta/del/intérprete"
+```
+
+4. Inicializar el entorno virtual:
+
+```sh
+.\.venv\Scripts\activate
+```
+
+5. Clonar el repositorio:
+
+```sh
+git clone https://github.com/GuilleAQN/OnRoad.git
+```
+
+
+6. Instala las dependencias principales:
 
 ```sh
 pip install -r requirements.txt
@@ -42,21 +62,21 @@ En caso de querer desarrollar, instala las dependencias de desarrollo:
 pip install -r requirements.dev.txt
 ```
 
-Nota: Para esto, descargar [Stripe CLI](https://docs.stripe.com/stripe-cli), cambiar la secret y public key del archivo ".env", y seguir la documentación de Stripe para correr este proyecto en local.
+Nota: Para esto, descargar [Stripe CLI](https://docs.stripe.com/stripe-cli), y usar la **STRIPE_SECRET_KEY** y la **STRIPE_PUBLIC_KEY** en un archivo ".env", y seguir la documentación de Stripe para correr este proyecto en local.
 
-4. Aplica las migraciones de la base de datos:
+7. Aplica las migraciones de la base de datos:
 
 ```sh
 python manage.py migrate
 ```
 
-5. Ejecuta el servidor de desarrollo:
+8. Ejecuta el servidor de desarrollo:
 
 ```sh
-python manage.py runserver 8000
+python manage.py runserver 3000
 ```
 
-La aplicación estará disponible en `http://localhost:8000/`.
+La aplicación estará disponible en `http://localhost:3000/`.
 
 ## Uso
 
