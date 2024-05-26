@@ -1,7 +1,7 @@
 # OnRoad
 
 <div class="logo" align="center">
-    <img src="https://onroad.sirv.com/Images/Logo.png" width="300" height="300" alt="Logo de la Compañia" style="border-radius: 50%; margin-bottom: 20px;">
+    <img src="https://onroad.sirv.com/Images/Logo-no-background.png" width="300" height="300" alt="Logo de la Compañia" style="border-radius: 50%; margin-bottom: 20px;">
 </div>
 
 "OnRoad" es una aplicación web desarrollada con Django que ofrece funcionalidades relacionadas con pagos en línea a través de Stripe, un sistema intermediario de pagos online. La aplicación permite a los usuarios realizar pagos de forma segura utilizando la integración de Stripe, lo que proporciona una experiencia fluida y confiable para los clientes.
@@ -48,7 +48,6 @@ pip install virtualenv -t "/ruta/del/intérprete"
 ```sh
 git clone https://github.com/GuilleAQN/OnRoad.git
 ```
-
 
 6. Instala las dependencias principales:
 
