@@ -180,7 +180,7 @@ def create_usuario(request):
                 usuario.save()
                 conductor.save()
 
-                template_name = BASE_DIR/"myapp/templates/conductor_respuesta.html"
+                template_name = BASE_DIR/"myapp/templates/email/conductor_respuesta.html"
                 html_contenido = render_to_string(
                     template_name=template_name,
                     context=informacion
@@ -288,9 +288,13 @@ def create_ruta(request):
 @login_required
 def buy_ticket(request):
     if request.method == "GET":
+        cliente = Clientes.objects.get(usuarioid=request.user.usuarioid)
+        viajes_del_cliente = Tickets.objects.filter(
+            clienteid=cliente).values_list('viajeid', flat=True)
+
         fecha = timezone.now()
         viajes = Viajes.objects.filter(
-            fechahorasalida__gte=str(fecha))
+            fechahorasalida__gte=str(fecha)).exclude(viajeid__in=viajes_del_cliente)
 
         return render(request, "venta_ticket.html", {"viajes": viajes, 'usuario': request.user})
     else:
@@ -356,6 +360,31 @@ def succesful_pay(request):
                 viaje.save()
                 ticket = Tickets.objects.create(
                     clienteid=cliente_credenciales, viajeid=viaje, preciototal=viaje.rutaid.preciobase)
+
+                ticket_detalle = Tickets.objects.get(ticketid=ticket.ticketid)
+
+                informacion = {
+                    "nombre_completo": f"{cliente_pago.cliente.nombre} {cliente_pago.cliente.apellido}",
+                    "viaje": f"{ticket_detalle.viajeid.fechahorasalida} - {ticket_detalle.viajeid.fechahorallegadaestimada}",
+                    "fecha": ticket_detalle.fechareservacion,
+                    "precio": ticket_detalle.preciototal,
+                }
+
+                template_name = BASE_DIR/"myapp/templates/email/compra_ticket_respuesta.html"
+                html_contenido = render_to_string(
+                    template_name=template_name,
+                    context=informacion
+                )
+                mensaje_plano = strip_tags(html_contenido)
+
+                send_mail(
+                    subject="Compra de Ticket Aprovada | OnRoad",
+                    message=mensaje_plano,
+                    recipient_list=[cliente_pago.cliente.correoelectronico],
+                    from_email=None,
+                    html_message=html_contenido,
+                    fail_silently=False
+                )
                 messages.success(
                     request, 'Se ha comprado el boleto exitosamente.')
             else:
@@ -398,7 +427,7 @@ def stripe_webhook(request):
     if event.type == 'checkout.session.completed':
         sesion = event['data']['object']
         id_sesion = sesion.get('id', None)
-        time.sleep(15)
+        time.sleep(10)
 
         cliente_pago = ClienteFormaDePago.objects.get(
             stripe_checkout_id=id_sesion)
