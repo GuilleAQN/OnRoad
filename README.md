@@ -87,11 +87,11 @@ La aplicación estará disponible en `http://localhost:3000/`.
 - **PostgreSQL**: Sistema de gestión de bases de datos relacional.
 - **Render**: Servicio de hosting para aplicaciones web.
 
-[![Django](https://img.shields.io/badge/Django-5.0.2-brightgreen)](https://www.djangoproject.com/)
+[![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com/)
+[![Bootstrap](https://img.shields.io/badge/bootstrap-%238511FA.svg?style=for-the-badge&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
+[![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Render](https://img.shields.io/badge/Render-%46E3B7.svg?style=for-the-badge&logo=render&logoColor=white)](https://render.com/)
 [![Stripe](https://img.shields.io/badge/Stripe-Payments-blue)](https://stripe.com/es)
-[![Bootstrap](https://img.shields.io/badge/Bootstrap-5.1.3-blueviolet)](https://getbootstrap.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue)](https://www.postgresql.org/)
-[![Render](https://img.shields.io/badge/Render-Hosting-yellowgreen)](https://render.com/)
 
 ## Contribución
 
