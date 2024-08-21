@@ -95,6 +95,12 @@ La aplicación estará disponible en `http://localhost:3000/`.
 
 ## Contribución
 
+<div align="center">
+
+![Alt](https://repobeats.axiom.co/api/embed/9fb7aa265e4f231795d36f7dc828451fcb4f9738.svg "Repobeats analytics image")
+
+</div>
+
 Si deseas contribuir al proyecto, sigue estos pasos:
 
 1. Haz un fork del repositorio.
