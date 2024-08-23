@@ -16,8 +16,6 @@ from dotenv import load_dotenv
 import dj_database_url
 import os
 
-from utils.db_selector import get_database_config
-
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -99,17 +97,13 @@ DATABASE_URLS = {
     'production': os.getenv('DATABASE_PROD_URL')
 }
 
-ENVIRONMENT = os.getenv('DJANGO_ENV', 'production')
+ENVIRONMENT = os.getenv('APP_ENV', 'production')
+
+DATABASE_URL = DATABASE_URLS.get(ENVIRONMENT, DATABASE_URLS['production'])
 
 DATABASES = {
-    env: get_database_config(url, ENVIRONMENT)
-    for env, url in DATABASE_URLS.items()
-    if url
+    'default': dj_database_url.parse(DATABASE_URL)
 }
-
-DATABASE_CONFIG = DATABASES.get(ENVIRONMENT, DATABASES['production'])
-
-DATABASES['default'] = DATABASE_CONFIG
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
