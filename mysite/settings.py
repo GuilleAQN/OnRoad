@@ -99,13 +99,14 @@ DATABASE_URLS = {
     'production': os.getenv('DATABASE_PROD_URL')
 }
 
+ENVIRONMENT = os.getenv('DJANGO_ENV', 'production')
+
 DATABASES = {
-    env: get_database_config(url)
+    env: get_database_config(url, ENVIRONMENT)
     for env, url in DATABASE_URLS.items()
     if url
 }
 
-ENVIRONMENT = os.getenv('DJANGO_ENV', 'production')
 DATABASE_CONFIG = DATABASES.get(ENVIRONMENT, DATABASES['production'])
 
 DATABASES['default'] = DATABASE_CONFIG
