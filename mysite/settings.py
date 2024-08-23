@@ -10,12 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from email.policy import default
 from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
 import os
+
+from utils.db_selector import get_database_config
 
 load_dotenv()
 
@@ -93,26 +94,21 @@ TEMPLATES = [
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-DATABASE_DEV_URL = os.getenv('DATABASE_DEV_URL')
-DATABASE_PROD_URL = os.getenv('DATABASE_PROD_URL')
+DATABASE_URLS = {
+    'development': os.getenv('DATABASE_DEV_URL'),
+    'production': os.getenv('DATABASE_PROD_URL')
+}
 
-DATABASES = {}
-
-if DATABASE_DEV_URL:
-    DATABASES.update(development={
-        'ENGINE': 'django.db.backends.postgresql', **dj_database_url.parse(DATABASE_DEV_URL)})
-
-if DATABASE_PROD_URL:
-    DATABASES.update(production={
-        'ENGINE': 'django.db.backends.postgresql', **dj_database_url.parse(DATABASE_PROD_URL)})
+DATABASES = {
+    env: get_database_config(url)
+    for env, url in DATABASE_URLS.items()
+    if url
+}
 
 ENVIRONMENT = os.getenv('DJANGO_ENV', 'production')
 DATABASE_CONFIG = DATABASES.get(ENVIRONMENT, DATABASES['production'])
 
 DATABASES['default'] = DATABASE_CONFIG
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
