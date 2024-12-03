@@ -102,7 +102,7 @@ python manage.py seed_data
 10. Crea un usuario de pruebas:
 
 ```sh
-python manage.py createsuperuser --username admin --password admin123 --email admin@example.com
+python manage.py createsuperuser
 ```
 
 11. Ejecuta el servidor de desarrollo:
