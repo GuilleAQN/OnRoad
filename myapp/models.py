@@ -152,11 +152,14 @@ class Usuarios(AbstractBaseUser):
                               db_column='rolid', verbose_name='ID del Rol')
     fechacreacion = models.DateTimeField(
         auto_now_add=True, verbose_name='Fecha de creación')
+    
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     objects = CustomUsuarioManager()
 
     USERNAME_FIELD = 'nombreusuario'
-    REQUIRED_FIELDS = ['rolid']
 
     def __str__(self):
         return self.nombreusuario
@@ -167,9 +170,9 @@ class Usuarios(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
-    @property
-    def is_staff(self):
-        return self.rolid.nombrerol == 'Administrador'
+    def save(self, *args, **kwargs):
+        self.is_staff = self.rolid.nombrerol == 'Administrador'
+        super().save(*args, **kwargs)
 
     class Meta:
         app_label = 'myapp'
