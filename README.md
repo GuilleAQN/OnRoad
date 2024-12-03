@@ -14,7 +14,7 @@ Además de las funcionalidades de pago, "OnRoad" puede incluir características 
 
 Asegúrate de tener instalado lo siguiente:
 
-- Python (versión 3.11.8)
+- Python (versión 3.11)
 
 ### Instalación
 
@@ -63,13 +63,49 @@ pip install -r requirements.dev.txt
 
 Nota: Para esto, descargar [Stripe CLI](https://docs.stripe.com/stripe-cli), y usar la **STRIPE_SECRET_KEY** y la **STRIPE_PUBLIC_KEY** en un archivo ".env", y seguir la documentación de Stripe para correr este proyecto en local.
 
-7. Aplica las migraciones de la base de datos:
+7. Clonar el archivo de las variables de entorno:
+
+```sh
+copy .env.example .env
+```
+
+Aqui es necesario configurar las siguientes variables:
+
+- `APP_ENV`: Define el entorno en el que se ejecuta la aplicación. Los valores posibles son:
+    - `production`: Para el entorno de producción.
+    - `development`: Para el entorno de desarrollo.
+
+- `DATABASE_DEV_URL`: URL de conexión a la base de datos en desarrollo. 
+
+- `DATABASE_PROD_URL`: URL de conexión a la base de datos en producción. Usa el mismo formato que el de desarrollo.
+
+- `STRIPE_SECRET_KEY` y `STRIPE_PUBLIC_KEY`: Claves para la integración con Stripe.
+   - La clave secreta (`STRIPE_SECRET_KEY`) se utiliza para operaciones internas con Stripe.
+   - La clave pública (`STRIPE_PUBLIC_KEY`) es para el cliente.
+
+- `EMAIL`: Dirección de correo electrónico utilizada por la aplicación para notificaciones o mensajes.
+
+- `EMAIL_PASSWORD`: Contraseña de la cuenta de correo configurada.
+
+8. Aplica las migraciones de la base de datos:
 
 ```sh
 python manage.py migrate
 ```
 
-8. Ejecuta el servidor de desarrollo:
+9. Aplica el ingreso de la data inicial a la base de datos:
+
+```sh
+python manage.py seed_data
+```
+
+10. Crea un usuario de pruebas:
+
+```sh
+python manage.py createsuperuser --username admin --password admin123 --email admin@example.com
+```
+
+11. Ejecuta el servidor de desarrollo:
 
 ```sh
 python manage.py runserver 3000
