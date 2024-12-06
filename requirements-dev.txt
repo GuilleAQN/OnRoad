@@ -8,7 +8,7 @@ colorama==0.4.6
 dill==0.3.8
 distlib==0.3.8
 dj-database-url==2.1.0
-Django==5.0.9
+Django==5.0.10
 django-auto-logout==0.5.1
 django-livereload==1.7
 filelock==3.13.1
